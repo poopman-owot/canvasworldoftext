@@ -16,7 +16,7 @@ server.listen(app.get('port'), function() {
 		var line_history = [];
 var letter_history = new Array(100000); 
  var i=0;
- while (i<100000) { myArray[i] =0; i++; }
+ while (i<100000) { letter_history[i] =0; i++; }
  var BLength = 0 ;
 
 		io.on('connection', function (socket) {
