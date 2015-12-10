@@ -40,7 +40,7 @@ function write(one_letter,emit) {
 
 
 
-socket.emit('write_letter', { letter: [ character.charCodeAt(0), position.x, position.y, textSize,tileWidth,tileHeight] });
+socket.emit('write_letter', { letter: [ character, position.x, position.y, textSize,tileWidth,tileHeight] });
     position.x += tileWidth;
 	position.highlightX += tileWidth;
 	
@@ -48,7 +48,7 @@ socket.emit('write_letter', { letter: [ character.charCodeAt(0), position.x, pos
 
 
 socket.on('write_letter', function (data) {
-	var letter= String.fromCharCode(data.letter)
+	var letter= data.letter;
 	  var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
     var box = new createjs.Shape(g)
     dragContainer.addChild(box);

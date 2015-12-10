@@ -14,10 +14,7 @@ server.listen(app.get('port'), function() {
 
 
 		var line_history = [];
-var letter_history = new Array(100000); 
- var i=0;
- while (i<100000) { myArray[i] =0; i++; }
- var BLength = 0 ;
+		var letter_history = [];
 
 		io.on('connection', function (socket) {
 
@@ -38,8 +35,7 @@ var letter_history = new Array(100000);
 		});
 				socket.on('write_letter', function (data) {
 
-letter_history[ BLength++ ] = (data.letter);
-	
+		letter_history.push(data.letter);
 
 		io.emit('write_letter', { letter: data.letter});
 		});
