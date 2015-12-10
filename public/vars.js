@@ -95,3 +95,15 @@ $("#highlight").height(tileHeight).width(tileWidth);
 
 
 }
+function paste(word){
+for(var i in word){
+
+if(word[i]=="\n"){
+world.triggerEnter();
+}
+else{
+write(word[i])
+}
+}
+
+}

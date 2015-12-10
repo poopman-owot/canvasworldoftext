@@ -1,4 +1,5 @@
 var write = function(){};
+
 var writtenamount = 0;
 $(document).ready(function(){
 	$("body").append('<canvas id="canvas" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas>');
@@ -158,7 +159,7 @@ world.triggerEnter();
     })
 			return
 		}
-  write(capture[0]);
+  paste(capture);
 
     }
 
