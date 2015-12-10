@@ -11,7 +11,8 @@ server.listen(app.get('port'), function() {
 });
 
 
-
+var letter_history = new Array(10000);
+var history_i = 0;
 
 		var line_history = [];
 		var letter_history = [];
@@ -23,7 +24,7 @@ server.listen(app.get('port'), function() {
 		for (var i in line_history) {
 		socket.emit('draw_line', { line: line_history[i] } );
 		}
-		for (var i in letter_history) {
+		for (i=0;i<history_i;i++) {
 		socket.emit('write_letter', { letter: letter_history[i] } );
 		}
 
@@ -36,6 +37,7 @@ server.listen(app.get('port'), function() {
 				socket.on('write_letter', function (data) {
 
 		letter_history.push(data.letter);
+        letter_history[history_i ++] = data.letter;
 
 		io.emit('write_letter', { letter: data.letter});
 		});
