@@ -1,4 +1,5 @@
-
+var write = function(){};
+var writtenamount = 0;
 $(document).ready(function(){
 	$("body").append('<canvas id="canvas" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas>');
 
@@ -20,8 +21,9 @@ stage.addChild(dragContainer);
 
 // Drag
 var offset = new createjs.Point();
-function write(one_letter,emit) {
-
+write=function(one_letter,emit) {
+	writtenamount ++;
+console.log(writtenamount)
 	character = one_letter;
     var g = new createjs.Graphics().beginFill("#ffffff").drawRect(position.x, position.y - 1, tileWidth, tileHeight );
     var box = new createjs.Shape(g)
