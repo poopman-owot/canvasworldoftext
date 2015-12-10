@@ -1,0 +1,94 @@
+html, body {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    font-family:"Courier New";
+    overflow:hidden;
+}
+#capture {
+    position: fixed;
+    top: -1000px;
+    left: -1000px;
+}
+#highlight {
+    display:block;
+    width:10px;
+    height:18px;
+    position:absolute;
+    left:-10000px;
+    top:-10000px;
+    z-index:100;
+    background:orange;
+opacity:0.3;
+}
+#coords {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    background: #ddd;
+    padding: 10px;
+}
+#toolbar {
+    width: 60px;
+    height: 100vh;
+    background: #ddd;
+    position: fixed;
+	z-index:101;
+	
+}
+#toolbar .tool-row  {
+    width: 60px;
+    text-align: center;
+    display: table-row;
+    height: 60px;
+    font-size: 35px;
+    line-height: 60px;
+    cursor: pointer;
+
+}
+
+
+#toolbar .tool-row span {
+    min-width: 60px;
+    height: 60px;
+    display: block;
+display:table-cell;
+line-height: 60px;
+
+}
+.icon{
+    color: #0093FF;	
+    background: black;
+}
+
+
+.icon:hover {
+    background: #0093FF;	
+    color: black;
+}
+
+#toolbar .tool-row  span:not(:first-child) {
+display:none;
+}
+
+#toolbar .tool-row:hover span{
+display:table-cell;
+}
+
+.tool-row select {
+    padding: 10px;
+}
+
+input.jscolor {
+    display: block;
+    width: 30px;
+    height: 30px;
+	border: 1px solid #0093FF;
+    margin: 0 auto;
+    vertical-align: 50%;
+    margin-top: 15px;
+	    font-size: 0px;
+}
+canvas{
+	cursor:initial !important;
+}

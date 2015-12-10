@@ -1,0 +1,9 @@
+{
+   "name": "world-of-pixels",
+   "description": "An inspiration of yourworldoftext.com created with canvas",
+   "author": "Kyle Cypher",
+   "dependencies" : {
+      "express": "4.x",
+      "socket.io": "*"
+   }
+}
