@@ -38,7 +38,7 @@ var history_i = 0;
 
 		letter_history.push(data.letter);
         letter_history[history_i ++] = data.letter;
-
+console.log(history_i)
 		io.emit('write_letter', { letter: data.letter});
 		});
 		socket.on('pointer_move', function (data) {
