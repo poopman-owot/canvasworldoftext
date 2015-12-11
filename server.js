@@ -11,11 +11,10 @@ server.listen(app.get('port'), function() {
 });
 
 
-var letter_history = new Array(100000);
-var history_i = 0;
-
+		var letter_history = new Array(100000);
+		var history_i = 0;
 		var line_history = [];
-		var letter_history = [];
+		var chat_history = [];
 var msg = "";
 		io.on('connection', function (socket) {
 
@@ -27,7 +26,9 @@ var msg = "";
 		for (i=0;i<history_i;i++) {
 		socket.emit('write_letter', { letter: letter_history[i] } );
 		}
-
+		for (var i in chat_history) {
+		socket.emit('say_message', { message: msg[i] } );
+		}
 		socket.on('draw_line', function (data) {
 
 		line_history.push(data.line);
@@ -43,6 +44,11 @@ var msg = "";
 		});
 		socket.on('say_message', function (data) {
 msg = data.message;
+	chat_history.push(data.msg);
+	if (chat_history.length>20){
+		chat_history.shift();
+	}
+	
 		io.emit('say_message', { message: msg});
 		});
 		});
