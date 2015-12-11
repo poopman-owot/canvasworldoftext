@@ -12,7 +12,10 @@ $("#messages").append('<p class="msg">'+data.message[0]+'</p>');
 })
 $("#send-btn").on("click",function(){
 if($(".chatinput").val() !== ""){
-sendmsg($(".chatinput").val())
+var message_to_send = $(".chatinput").val().split("\n")
+for (var i in message_to_send ){
+sendmsg(message_to_send[i])
+}
 $(".chatinput").val("");}
 
 })
