@@ -41,8 +41,8 @@ var history_i = 0;
 
 		io.emit('write_letter', { letter: data.letter});
 		});
-		socket.on('pointer_move', function (data) {
+		socket.on('say_message', function (data) {
 
-		io.emit('pointer_move', { pointer: data.pointer});
+		io.emit('say_message', { message: data.message});
 		});
 		});
