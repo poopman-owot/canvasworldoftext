@@ -27,7 +27,7 @@ var msg = "";
 		socket.emit('write_letter', { letter: letter_history[i] } );
 		}
 		for (var i in chat_history) {
-		socket.emit('say_message', { message: msg[i] } );
+		socket.emit('say_message', { message: chat_history[i] } );
 		}
 		socket.on('draw_line', function (data) {
 
@@ -44,11 +44,11 @@ var msg = "";
 		});
 		socket.on('say_message', function (data) {
 msg = data.message;
-	chat_history.push(data.msg);
-	if (chat_history.length>20){
-		chat_history.shift();
-	}
+	chat_history.push(data.msg)
+if(chat_history.length>5){
 	
+	chat_history.shift()
+}
 		io.emit('say_message', { message: msg});
 		});
 		});
