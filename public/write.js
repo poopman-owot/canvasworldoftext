@@ -1,7 +1,7 @@
 var write = function(){};
 var writtenamount = 0;
 $(document).ready(function(){
-	alert("Hey diana pleae try the chat button!")
+
 	$("body").append('<canvas id="canvas" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas>');
 
 var stage_highlight = new createjs.Stage("canvas_highlight");

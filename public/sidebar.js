@@ -10,6 +10,16 @@ socket.on('say_message', function (data) {
 $("#messages").append('<p class="msg">'+data.message[0].replace(/ /g,"&nbsp;")+'</p>');
 	
 })
+
+var sendalert = function(msg){
+socket.emit('alert_message', { alert: [msg] });
+};
+socket.on('alert_message', function (data) {
+
+alert(data.alert[0])
+	
+})
+
 $("#send-btn").on("click",function(){
 if($(".chatinput").val() !== ""){
 var message_to_send = $(".chatinput").val().split("\n")

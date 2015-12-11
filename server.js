@@ -50,4 +50,11 @@ msg = data.message;
 	}
 		io.emit('say_message', { message: msg});
 		});
+		
+		
+		
+				socket.on('alert_message', function (data) {
+		io.emit('alert_message', { alert: data.alert});
+		});
+		
 		});
