@@ -19,13 +19,11 @@ $(".chatinput").val("");}
 
 
 
-var flipX = 0;
-var chat_is_closed = true;
-var unicode_is_cloased = true;
+
 
 $(".overlay").on("click", function() {
   $(".unicode-table").hide();
-  unicode_is_cloased = true;
+  unicode_is_closed = true;
 })
 $(".toolbar-tool").on("click", function() {
   if ($(this).data("tooltip") == "Chat") {
@@ -37,12 +35,12 @@ $(".toolbar-tool").on("click", function() {
       chat_is_closed = true;
     }
   } else if ($(this).data("tooltip") == "Unicode Symboles") {
-    if (unicode_is_cloased) {
+    if (unicode_is_closed) {
       $(".unicode-table").show();
-      unicode_is_cloased = false;
+      unicode_is_closed = false;
     } else {
       $(".unicode-table").hide();
-      unicode_is_cloased = true;
+      unicode_is_closed = true;
     }
   }
 

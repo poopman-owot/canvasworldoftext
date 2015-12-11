@@ -143,7 +143,11 @@ function pressHandler(e) {
     }
 }
 setInterval(function () {
+	if(chat_is_closed && unicode_is_closed){
+	
+	
     $("#capture").select();
+	}
 });
 
 $("#capture").on("input", function () {

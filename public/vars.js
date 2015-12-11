@@ -3,6 +3,9 @@ var fontSize;
 var pixelData;
 var character;
 var dragContainer;
+var flipX = 0;
+var chat_is_closed = true;
+var unicode_is_closed = true;
 var world = {
 	triggerEnter: function(){	
 	position.x = position.clickX - dragContainer.x + tileWidth;
