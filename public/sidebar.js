@@ -57,10 +57,10 @@ $(".toolbar-tool").on("click", function() {
     }
   }
   else if ($(this).data("tooltip") == "Font size +") {
-fontSize("bigger")
+fontSize("bigger");
   }
-    else if ($(this).data("tooltip") == "Font size +") {
-fontSize("smaller")
+    else if ($(this).data("tooltip") == "Font size -") {
+fontSize("smaller");
   }
   
 

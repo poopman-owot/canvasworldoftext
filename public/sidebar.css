@@ -89,6 +89,7 @@
   display: block;
   background: #f3f5f6;
   display: none;
+z-index: 1200;
 }
 
 .chatinput {
