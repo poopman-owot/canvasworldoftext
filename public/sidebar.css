@@ -1,0 +1,177 @@
+#toolbar {
+  padding-top: 10px;
+  width: 60px;
+  background: #FBFBFB;
+  height: 100vh;
+  position: fixed;
+  display: block;
+}
+
+.toolbar-tool {
+  display: block;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  float: left;
+  cursor: pointer;
+  line-height: 30px;
+}
+
+.toolbar-tool:hover {
+  background-color: #e3e5e6;
+  color: #2795EE;
+}
+
+.flip {
+  -ms-transform: rotate(90deg);
+  /* IE 9 */
+  -webkit-transform: rotate(90deg);
+  /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+}
+
+.toggled {
+  background-color: #2795EE;
+  color: #FBFBFB;
+}
+
+.toggled:hover {
+  background-color: #2795EE;
+  color: #FBFBFB;
+}
+
+.material-icons {
+  line-height: 30px;
+}
+
+#cursor {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  cursor: none;
+}
+
+#tooltip {
+  position: absolute;
+  z-index: 1100;
+  opacity: 0;
+  display: table;
+  background-color: black;
+  color: white;
+  padding: 0.5em;
+}
+
+#toolbar:hover #tooltip {
+  -webkit-transition: opacity 0.8s;
+  -webkit-transition-delay: 1s;
+  opacity: 1
+}
+
+.tooltip-hide {
+  display: block;
+  float: left;
+  height: 100%;
+  width: 100%;
+}
+
+.tooltip-hide:hover #tooltip {
+  -webkit-transition: opacity 0s !important;
+  -webkit-transition-delay: 0s !important;
+  opacity: 0 !important;
+}
+
+.chatbar {
+  height: 100vh;
+  width: 400px;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  display: block;
+  background: #f3f5f6;
+  display: none;
+}
+
+.chatinput {
+  resize: none;
+  width: 380px;
+  height: 60px;
+  border: 0 none;
+  margin: 0 auto;
+  display: table;
+  padding: 10px;
+  background-color: #FBFBFB;
+  overflow: hidden;
+}
+
+.type-area {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+#send-btn {
+  background-color: #249D7F;
+  display: table;
+  color: #FBFBFB;
+  height: 30px;
+  width: 50px;
+  text-align: center;
+  cursor: pointer;
+  line-height: 30px;
+  float: left;
+}
+
+#messages {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 10px;
+}
+
+.msg {
+  font-size: 16px;
+  height: 18px;
+  margin: 0 10px;
+  font-family: Courier New;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.unicode-table {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 1200;
+  background-color: rgba(36, 157, 127, 0.31);
+}
+
+.unicode-table table {
+  background-color: #f3f5f6;
+  margin: 0 auto;
+}
+
+.vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.overlay {
+  background-color: #249D7F;
+  display: table;
+  color: #FBFBFB;
+  height: 30px;
+  width: 50px;
+  text-align: center;
+  cursor: pointer;
+  line-height: 30px;
+}
