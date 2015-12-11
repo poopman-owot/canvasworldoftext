@@ -1,5 +1,5 @@
 
-
+var sendalert = function(){};
 $(document).ready(function(){
 	
 var sendmsg = function(msg){
@@ -11,7 +11,7 @@ $("#messages").append('<p class="msg">'+data.message[0].replace(/ /g,"&nbsp;")+'
 	
 })
 
-var sendalert = function(msg){
+ sendalert = function(msg){
 socket.emit('alert_message', { alert: [msg] });
 };
 socket.on('alert_message', function (data) {
