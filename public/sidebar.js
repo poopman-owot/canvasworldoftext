@@ -7,7 +7,7 @@ socket.emit('say_message', { message: [msg] });
 };
 socket.on('say_message', function (data) {
 
-$("#messages").append('<p class="msg">'+data.message[0]+'</p>');
+$("#messages").append('<p class="msg">'+data.message[0].replace(/ /g,"&nbsp;")+'</p>');
 	
 })
 $("#send-btn").on("click",function(){
