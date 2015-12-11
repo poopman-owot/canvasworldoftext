@@ -143,10 +143,11 @@ function pressHandler(e) {
     }
 }
 setInterval(function () {
-	if(chat_is_closed && unicode_is_closed){
-	
+	if(unicode_is_closed){
+	if(!$(".chatinput").is(":focus")){
 	
     $("#capture").select();
+	}
 	}
 });
 
