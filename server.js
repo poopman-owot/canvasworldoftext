@@ -15,7 +15,7 @@ server.listen(app.get('port'), function() {
 		var history_i = 0;
 		var line_history = [];
 		var chat_history = [];
-var msg = "";
+        var msg = "";
 		io.on('connection', function (socket) {
 
 
@@ -37,18 +37,13 @@ var msg = "";
 		});
 				socket.on('write_letter', function (data) {
 
-		letter_history.push(data.letter);
         letter_history[history_i ++] = data.letter;
 
 		io.emit('write_letter', { letter: data.letter});
 		});
 		socket.on('say_message', function (data) {
 msg = data.message;
-	chat_history.push(data.msg)
-if(chat_history.length>5){
-	
-	chat_history.shift()
-}
+	chat_history.push(data.message)
 		io.emit('say_message', { message: msg});
 		});
 		});
