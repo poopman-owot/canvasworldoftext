@@ -182,6 +182,8 @@ fontSize("smaller")
 
 //-------------------------------------------keydown events
 $(document).on("keydown",function(e){
+	if(unicode_is_closed){
+	if(!$(".chatinput").is(":focus")){
 var key = 'which' in e ? e.which : e.keyCode;
 //down arrow
 if(key == 40){world.moveCursor("down")}
@@ -195,6 +197,7 @@ if(key == 37){world.moveCursor("left")}
 if(key == 9){world.moveCursor("tab")}	
 //tab
 if(key == 8){write(" ");world.moveCursor("backspace")}	
+}}
 })
 
 })//ready

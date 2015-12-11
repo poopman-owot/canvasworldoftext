@@ -56,6 +56,13 @@ $(".toolbar-tool").on("click", function() {
       unicode_is_closed = true;
     }
   }
+  else if ($(this).data("tooltip") == "Font size +") {
+fontSize("bigger")
+  }
+    else if ($(this).data("tooltip") == "Font size +") {
+fontSize("smaller")
+  }
+  
 
   $("#cursor").hide();
   $("#cursor").text("");
