@@ -1,8 +1,5 @@
 var write = function(){};
-var say = function(msg){
-	
-	socket.emit('say_message', { message: [msg] });
-};
+var email = function(){};
 var writtenamount = 0;
 $(document).ready(function(){
 	$("body").append('<canvas id="canvas" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width()*2 + '" height="' + $(window).height()*2 + '"></canvas>');
@@ -51,6 +48,10 @@ socket.emit('write_letter', { letter: [ character.charCodeAt(0), position.x, pos
 	position.highlightX += tileWidth;
 	
 }
+email = function(msg){
+	
+	socket.emit('say_message', { message: [msg] });
+};
 socket.on('say_message', function (data) {
 	console.log(data.message)
 	

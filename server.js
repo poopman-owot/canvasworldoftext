@@ -16,7 +16,7 @@ var history_i = 0;
 
 		var line_history = [];
 		var letter_history = [];
-
+var msg = "";
 		io.on('connection', function (socket) {
 
 
@@ -42,7 +42,7 @@ var history_i = 0;
 		io.emit('write_letter', { letter: data.letter});
 		});
 		socket.on('say_message', function (data) {
-
-		io.emit('say_message', { message: data.message});
+msg = data.message;
+		io.emit('say_message', { message: msg});
 		});
 		});
