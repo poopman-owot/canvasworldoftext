@@ -43,7 +43,11 @@ server.listen(app.get('port'), function() {
 		});
 		socket.on('say_message', function (data) {
 msg = data.message;
-	chat_history.push(data.message)
+	chat_history.push(data.message);
+	if (chat_history.length > 10){
+		chat_history.shift();
+		
+	}
 		io.emit('say_message', { message: msg});
 		});
 		});
