@@ -55,7 +55,7 @@ email = function(msg){
 socket.on('say_message', function (data) {
 	console.log(data.message)
 	
-}
+})
 
 socket.on('write_letter', function (data) {
 	var letter= data.letter;
