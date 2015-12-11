@@ -53,7 +53,7 @@ email = function(msg){
 	socket.emit('say_message', { message: [msg] });
 };
 socket.on('say_message', function (data) {
-	console.log(data.message)
+	console.log(data.message[0])
 	
 })
 
