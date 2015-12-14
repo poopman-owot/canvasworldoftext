@@ -15,13 +15,26 @@ var chat_history = [];
 var msg = "";
 
 io.on('connection', function(socket) {
-	
-	
-    for (i = 0; i < history_i; i++) {
+	 socket.on('connected', function(data) {
+
+		     for (i = 0; i < history_i; i++) {
+			letter = letter_history[i];			
+			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height){		
+				 
         socket.emit('write_letter', {
             letter: letter_history[i]
         });
+		
+				}
+		
+		
     }
+		 
+		 
+		 
+	 })
+	
+
 	
 	
 	

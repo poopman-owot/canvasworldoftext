@@ -1,5 +1,25 @@
 var write = function() {};
 var writtenamount = 0;
+var needs_updated = false;
+var old_location;
+var new_location = {
+		x:0,
+		y:0
+};
+var updateArea = function (){
+	old_location = {
+		x:dragContainer.x,
+		y:dragContainer.y
+	}
+	
+			dragContainer.removeAllChildren()
+		socket.emit('connected',{
+			dragContainerX: [dragContainer.x],
+			dragContainerY: [dragContainer.y],
+			width: $(window).width(),
+			height: $(window).height()
+			
+		})}
 $(document).ready(function() {
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
         var stage_highlight = new createjs.Stage("canvas_highlight");
@@ -16,16 +36,15 @@ $(document).ready(function() {
         // Drag
         var offset = new createjs.Point();
         write = function(one_letter, emit) {
-            writtenamount++;
-            console.log(writtenamount);
+           
             character = one_letter;
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(position.x, position.y - 1, tileWidth, tileHeight);
             var box = new createjs.Shape(g);
-            dragContainer.addChild(box);
+            //dragContainer.addChild(box);
             var text = new createjs.Text("" + one_letter + "", "" + textSize + "px Courier New");
             text.x = position.x;
             text.y = position.y;
-            dragContainer.addChild(text);
+           // dragContainer.addChild(text);
             $("#highlight").css({
                 "left": "" + (position.highlightX + tileWidth) + "px",
                 "top": "" + position.highlightY + "px"
@@ -36,8 +55,12 @@ $(document).ready(function() {
             position.x += tileWidth;
             position.highlightX += tileWidth;
         };
+
+		updateArea();
+		
         socket.on('write_letter', function(data) {
-            var letter = data.letter;
+			var letter = data.letter;
+
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
             var box = new createjs.Shape(g);
             dragContainer.addChild(box);
@@ -45,9 +68,12 @@ $(document).ready(function() {
             text.x = letter[1];
             text.y = letter[2];
             dragContainer.addChild(text);
+		
+			
         });
 
         function startDrag(event) {
+			
             if (!is_drawing) {
                 $("#highlight").css({
                     "left": "",
@@ -80,13 +106,28 @@ $(document).ready(function() {
                 dragContainer.y = event.stageY - offset.y;
                 $("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)));
                 $("#coord-y").text(" Y: " + (Math.ceil(offset.y / 1000)) * -1);
+	new_location = {
+		x:dragContainer.x,
+		y:dragContainer.y
+	}
             }
             // Update the stage
 
         function tick(event) {
-            stage.update();
-        }
 
+            stage.update();
+			
+
+        }
+$(document).on("keydown mouseup",function(){
+if(new_location.x !== old_location.x && new_location.y !== old_location.y){
+updateArea();
+
+old_location.x = new_location.x;
+old_location.y= new_location.y;
+
+	}
+})
         function pressHandler(e) {
             e.onMouseMove = function(ev) {
                 e.target.x = ev.stageX - dragContainer.x;
