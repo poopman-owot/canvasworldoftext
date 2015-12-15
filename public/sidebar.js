@@ -62,6 +62,8 @@ $(document).ready(function() {
         alert(data.alert[0]);
     });
     $(".unicode-table").on("click", function(event) {
+		var stuff = " <tbody><tr>";
+
         var Localtype = event.target.localName;
         if (Localtype !== "td" && Localtype !== "tr" && Localtype !== "tbody" && Localtype !== "table") {
             $(".unicode-table").hide();

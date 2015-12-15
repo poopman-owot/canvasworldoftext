@@ -22,6 +22,7 @@ var updateArea = function (){
 			
 		})}
 $(document).ready(function() {
+
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
         var stage_highlight = new createjs.Stage("canvas_highlight");
         var stage = new createjs.Stage("canvas");
@@ -224,5 +225,15 @@ old_location.y= new_location.y;
                 }
             }
         });
+var stuff = " <tbody><tr>";
+for(i=0; i<800;i++){
 
+
+stuff+="<td>"+(String.fromCharCode(i+9472))+"</td>"
+if (i%40==0 && i!==0){
+stuff += "</tr><tr>"
+}
+}
+stuff += "</tr></tbody>"
+$(".vertical-center table").html(stuff)
     }); //ready
