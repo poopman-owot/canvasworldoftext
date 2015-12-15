@@ -39,7 +39,10 @@ $(document).ready(function() {
            if(typeof color == "undefined"){
 			   color = document.getElementById("jscolor_id").style.backgroundColor
 		   }
-		   
+		   else if (color =="random"){
+			   
+			   color = ("#"+Math.floor(16777215*Math.random()).toString(16))
+		   }
             character = one_letter;
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(position.x, position.y - 1, tileWidth, tileHeight);
             var box = new createjs.Shape(g);
