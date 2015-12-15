@@ -12,6 +12,7 @@
 	<script src="https://code.createjs.com/createjs-2013.02.12.min.js"></script>
 	<script src="socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="vars.js"></script>
+	<script type="text/javascript" src="jscolor.min.js"></script>
 	<script type="text/javascript" src="write.js"></script>
 		<script type="text/javascript" src="sidebar.js"></script>
 	
@@ -26,14 +27,18 @@
 <span id="cursor" class="material-icons noselect"></span>
 <div id="toolbar" class="noselect">
 
+  <!--
   <span data-tooltip="Draw" class="make-cursor toggleable toolbar-tool material-icons">edit</span>
   <span data-tooltip="Erase" class="make-cursor toggleable toolbar-tool material-icons flip">create</span>
-  <span data-tooltip="Color" class="toolbar-tool material-icons">color_lens</span>
+  -->
+  <button id="jscolor_id" data-tooltip="Color" class="toolbar-tool jscolor  {valueElement:null,value:'000000'}"></button>
   <span data-tooltip="Eyedropper" class="make-cursor toggleable toolbar-tool material-icons">colorize</span>
   <span data-tooltip="Font size +" class="toolbar-tool material-icons">format_size</span>
   <span data-tooltip="Font size -" class="toolbar-tool material-icons">text_fields</span>
+  <!--
   <span data-tooltip="Zoom in" class="toolbar-tool material-icons">zoom_in</span>
   <span data-tooltip="Zoom out" class="toolbar-tool material-icons">zoom_out</span>
+  -->
   <span data-tooltip="Chat" class="toggleable toolbar-tool material-icons">sms</span>
   <span data-tooltip="Unicode Symboles" class="toolbar-tool material-icons">tag_faces</span>
   <span class="tooltip-hide"><span id="tooltip"></span></span>
@@ -672,6 +677,7 @@
 </span>
 
     <span id="send-btn" class="noselect">send</span>
+	<input id="nick" placeholder="username" maxlength="26"></input>
     <textarea class="chatinput noselect" placeholder="type here"></textarea>
   </div>
 </div>

@@ -50,7 +50,7 @@ $(document).ready(function() {
                 "top": "" + position.highlightY + "px"
             });
             socket.emit('write_letter', {
-                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight]
+                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,document.getElementById("jscolor_id").style.backgroundColor]
             });
             position.x += tileWidth;
             position.highlightX += tileWidth;
@@ -64,7 +64,7 @@ $(document).ready(function() {
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
             var box = new createjs.Shape(g);
            // dragContainer.addChild(box);
-            var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New");
+            var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
             text.x = letter[1];
             text.y = letter[2];
             dragContainer.addChild(text);
@@ -79,7 +79,7 @@ letter = data.letter;
  var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
             var box = new createjs.Shape(g);
            dragContainer.addChild(box);
-            var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New");
+            var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
             text.x = letter[1];
             text.y = letter[2];
             dragContainer.addChild(text);
@@ -152,9 +152,10 @@ old_location.y= new_location.y;
         }
         setInterval(function() {
             if (unicode_is_closed) {
-                if (!$(".chatinput").is(":focus")) {
+                if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus")) {
                     $("#capture").select();
                 }
+
             }
         });
         $("#capture").on("input", function() {
@@ -182,7 +183,7 @@ old_location.y= new_location.y;
             //-------------------------------------------keydown events
         $(document).on("keydown", function(e) {
             if (unicode_is_closed) {
-                if (!$(".chatinput").is(":focus")) {
+               if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus")) {
                     var key = 'which' in e ? e.which : e.keyCode;
                     //down arrow
                     if (key == 40) {

@@ -43,7 +43,8 @@ io.on('connection', function(socket) {
 	
     for (var i in chat_history) {
         socket.emit('say_message', {
-            message: chat_history[i]
+            message: chat_history[i],
+			connect: "new"
         });
     }
 	
@@ -96,7 +97,8 @@ io.on('connection', function(socket) {
 		
 		
         io.emit('say_message', {
-            message: msg
+            message: msg,
+			connect: "old"
         });
     });
 	
