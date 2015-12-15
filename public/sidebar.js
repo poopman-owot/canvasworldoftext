@@ -62,8 +62,7 @@ $(document).ready(function() {
         alert(data.alert[0]);
     });
     $(".unicode-table").on("click", function(event) {
-		var stuff = " <tbody><tr>";
-
+		
         var Localtype = event.target.localName;
         if (Localtype !== "td" && Localtype !== "tr" && Localtype !== "tbody" && Localtype !== "table") {
             $(".unicode-table").hide();
@@ -76,6 +75,29 @@ $(document).ready(function() {
 		}
 		else{
 		user = $("#nick").val();
+		}
+		if( ( /^cheat$/i).test($("#nick").val())){
+			if ((/random(| )color( |=)on/i).test($(".chatinput").val())) {
+          
+            $(".chatinput").val("CHEAT ACTIVATED");
+			randomColor = true;
+			setTimeout(function(){
+				
+				$(".chatinput").val("");
+				$("#nick").val("")
+			},1000)
+        }
+		else if ((/random(| )color( |=)off/i).test($(".chatinput").val())) {
+         
+            $(".chatinput").val("CHEAT DEACTIVATED");
+			randomColor = false;
+			setTimeout(function(){
+				
+				$(".chatinput").val("");
+				$("#nick").val("")
+			},1000)
+        }
+			return false;
 		}
         if ($(".chatinput").val() !== "") {
             var message_to_send = $(".chatinput").val().split("\n");
