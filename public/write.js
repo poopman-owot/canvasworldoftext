@@ -119,8 +119,8 @@ letter = data.letter;
         function doDrag(event) {
                 dragContainer.x = event.stageX - offset.x;
                 dragContainer.y = event.stageY - offset.y;
-                $("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)));
-                $("#coord-y").text(" Y: " + (Math.ceil(offset.y / 1000)) * -1);
+                $("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)-1));
+                $("#coord-y").text(" Y: " + (((Math.ceil(offset.y / 1000)) * -1)+1));
 	new_location = {
 		x:dragContainer.x,
 		y:dragContainer.y
