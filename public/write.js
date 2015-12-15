@@ -35,8 +35,11 @@ $(document).ready(function() {
         stage.addChild(dragContainer);
         // Drag
         var offset = new createjs.Point();
-        write = function(one_letter, emit) {
-           
+        write = function(one_letter, color) {
+           if(typeof color == "undefined"){
+			   color = document.getElementById("jscolor_id").style.backgroundColor
+		   }
+		   
             character = one_letter;
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(position.x, position.y - 1, tileWidth, tileHeight);
             var box = new createjs.Shape(g);
@@ -50,7 +53,7 @@ $(document).ready(function() {
                 "top": "" + position.highlightY + "px"
             });
             socket.emit('write_letter', {
-                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,document.getElementById("jscolor_id").style.backgroundColor]
+                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color]
             });
             position.x += tileWidth;
             position.highlightX += tileWidth;
