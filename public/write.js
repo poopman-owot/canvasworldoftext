@@ -2,6 +2,7 @@ var write = function() {};
 var writtenamount = 0;
 var needs_updated = false;
 var old_location;
+var randomColor = false;
 var new_location = {
 		x:0,
 		y:0
@@ -36,6 +37,10 @@ $(document).ready(function() {
         // Drag
         var offset = new createjs.Point();
         write = function(one_letter, color) {
+			if (randomColor == true){
+				color = "random";
+				
+			}
            if(typeof color == "undefined"){
 			   color = document.getElementById("jscolor_id").style.backgroundColor
 		   }
