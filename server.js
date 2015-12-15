@@ -13,13 +13,16 @@ var letter_history = new Array(100000);
 var history_i = 0;
 var chat_history = [];
 var msg = "";
+var match = false;
 
 io.on('connection', function(socket) {
+	
+	
 	 socket.on('connected', function(data) {
 
 		     for (i = 0; i < history_i; i++) {
 			letter = letter_history[i];			
-			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height){		
+			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height && letter[0]!==32 ){		
 				 
         socket.emit('write_letter', {
             letter: letter_history[i]
@@ -48,10 +51,39 @@ io.on('connection', function(socket) {
 	
 	
     socket.on('write_letter', function(data) {
-        letter_history[history_i++] = data.letter;
-        io.emit('write_letter', {
-            letter: data.letter
+		match = false;
+		
+		for(i=0;i<history_i;i++){
+			if(data.letter[1] == letter_history[i][1] && data.letter[2] == letter_history[i][2]){
+				 letter_history[i] = data.letter;
+				 match = true;
+			 io.emit('replace_letter', {
+            letter: data.letter,
+			id:i
         });
+			}
+					
+		}
+		if (!match){
+			  letter_history[history_i++] = data.letter;
+			  	   io.emit('write_letter', {
+            letter: data.letter,
+			
+        });
+			
+		}
+		
+
+      
+       
+
+
+
+
+
+
+
+
     });
 	
 	

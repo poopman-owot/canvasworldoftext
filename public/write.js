@@ -63,7 +63,7 @@ $(document).ready(function() {
 
             var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
             var box = new createjs.Shape(g);
-            dragContainer.addChild(box);
+           // dragContainer.addChild(box);
             var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New");
             text.x = letter[1];
             text.y = letter[2];
@@ -71,7 +71,22 @@ $(document).ready(function() {
 		
 			
         });
+ socket.on('replace_letter', function(data) {
+data.id= data.id
+//dragContainer.removeAllChildren()
+//updateArea();
+letter = data.letter;
+ var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]);
+            var box = new createjs.Shape(g);
+           dragContainer.addChild(box);
+            var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New");
+            text.x = letter[1];
+            text.y = letter[2];
+            dragContainer.addChild(text);
 
+ });
+ 
+ 
         function startDrag(event) {
 			
             if (!is_drawing) {
