@@ -104,9 +104,14 @@ io.on('connection', function(socket) {
 	
 	
     socket.on('alert_message', function(data) {
-        io.emit('alert_message', {
-            alert: data.alert
-        });
+		//check to see if the person has the password to send messages.
+		if(data.alert[1]=="Ilove19881989"){ 
+		io.emit('alert_message', {alert: data.alert, notify:"Message sent."});
+		}
+		//if the wrong pass is place, send an error.
+		else{
+			io.emit('alert_message', {notify:"Error: message not sent."});
+			}
     });
 	
 	

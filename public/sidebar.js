@@ -21,50 +21,65 @@ function rgbToHex(r, g, b) {
     return ((r << 16) | (g << 8) | b).toString(16);
 }
 $(document).ready(function() {
-    var sendmsg = function(msg,user) {
-        socket.emit('say_message', {
-            message: [msg,user,user_id]
-        });
-    };
-    socket.on('say_message', function(data) {
-	console.log(data.connect)
-		if (data.message[1] !== oldname && data.connect=="new"){
-		if(data.message[2] == user_id){
-			user_color = "red"
-		}
-		else{
-			user_color = "color:#2795EE;"
-		}
-		$("#messages").append('<div class="username"style="color:'+user_color+'">' + data.message[1].replace(/ /g, "&ensp;") + '</div>');
+
+//		this variable sends a message to the chat area for the users.	
+var sendmsg = function(msg,user) {socket.emit('say_message', {message: [msg,user,user_id] });};
+
+//		this public variable sends a mass alert message to users.	
+sendalert = function(msg,amount) {socket.emit('alert_message', {alert: [msg,amount,user_id]});};
+
+//-----------------------------------------	| Sending messages on the chat area.
+ socket.on('say_message', function(data) {	 
+//		init some the variables
+		var write_name = false;
+		var user_color = ""
 		
-		oldname = data.message[1];
-		}
+//		check if the messagename has been said before. if not, writename should be true so we can write the name.
+		if (data.message[1] !== oldname){write_name = true}
 		
-		else if (data.message[1] !== oldname && user_id == data.message[2]){
-				if(data.message[2] == user_id){
-			user_color = "color:#2795EE;"
-		}
-		else{
-			user_color = ""
-		}
+//		check if the user id is yours. if it is then change color.
+		if(data.message[2] == user_id){user_color = "#2795EE;"}
+		
+//		if not, check to see if it is a new message at least.
+		else if(data.message[2] !== user_id && data.connect!=="new"){user_color = "#5827EE;"}
+		
+//		make sure that what we are attempting to write exists.
 		if(typeof data.message[1]!== "undefined"){
-		$("#messages").append('<div class="username"style="'+user_color+'">' + data.message[1].replace(/ /g, "&ensp;") + '</div>');
+			
+//		check to see if we should write the username.		
+		if(write_name)	{$("#messages").append('<div class="username"style="color:'+user_color+'">' + data.message[1].replace(/ /g, "&ensp;") + '</div>'); oldname = data.message[1];}
 		
-		oldname = data.message[1];
-		}
-		}	
-if(typeof data.message[1]!== "undefined"){		
-        $("#messages").append('<p class="msg">' + data.message[0].replace(/ /g, "&ensp;") + '</p>');
-}
-    });
-    sendalert = function(msg) {
-        socket.emit('alert_message', {
-            alert: [msg]
-        });
-    };
-    socket.on('alert_message', function(data) {
-        alert(data.alert[0]);
-    });
+//		now we will write the message.	
+		$("#messages").append('<p class="msg">' + data.message[0].replace(/ /g, "&ensp;") + '</p>');	
+		
+		}//if exists
+});	//say message
+   
+//-----------------------------------------	| Used for sending a mass alert messages.
+
+socket.on('alert_message', function(data) {
+//		check to see if the message exists		
+		if(typeof data.alert!== "undefined"){
+			
+//		check if you are not the sender.
+		if(user_id!==data.alert[2]){
+			
+//		Go ahead and send a basic alert of the message: | TODO: change this is a custom popup.
+			alert(data.alert[0]);
+		}//	if others
+		
+//		If you are the sender.
+		else{console.log(data.notify);}
+		
+		}//if exists
+		
+//		If something fails send a warning.
+		console.warn(data.notify);		
+});	//send alert message
+
+
+
+
     $(".unicode-table").on("click", function(event) {
 		
         var Localtype = event.target.localName;
