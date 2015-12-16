@@ -47,11 +47,15 @@ $(document).ready(function() {
 		else{
 			user_color = ""
 		}
+		if(typeof data.message[1]!== "undefined"){
 		$("#messages").append('<div class="username"style="'+user_color+'">' + data.message[1].replace(/ /g, "&ensp;") + '</div>');
 		
 		oldname = data.message[1];
-		}		
+		}
+		}	
+if(typeof data.message[1]!== "undefined"){		
         $("#messages").append('<p class="msg">' + data.message[0].replace(/ /g, "&ensp;") + '</p>');
+}
     });
     sendalert = function(msg) {
         socket.emit('alert_message', {
