@@ -1,4 +1,5 @@
 var sendalert = function() {};
+var findOwner = function() {};
 var defaultuser = "anon"+Math.random();
 var user_id = Math.random();
 var oldname =" ";
@@ -26,8 +27,10 @@ $(document).ready(function() {
 var sendmsg = function(msg,user) {socket.emit('say_message', {message: [msg,user,user_id] });};
 
 //		this public variable sends a mass alert message to users.	
-sendalert = function(msg,amount) {socket.emit('alert_message', {alert: [msg,amount,user_id]});};
+sendalert = function(msg,amount,owner) {socket.emit('alert_message', {alert: [msg,amount,user_id,owner]});};
 
+//		this public variable finds the owner of some text.
+findOwner = function(amount,warning){socket.emit('find_owner', {owner: [position.x,position.y,amount,user_id,warning]});}
 //-----------------------------------------	| Sending messages on the chat area.
  socket.on('say_message', function(data) {	 
 //		init some the variables
@@ -63,13 +66,14 @@ socket.on('alert_message', function(data) {
 			
 //		check if you are not the sender.
 		if(user_id!==data.alert[2]){
-			
+//		check if you are the owner to be sent to			
 //		Go ahead and send a basic alert of the message: | TODO: change this is a custom popup.
 			alert(data.alert[0]);
 		}//	if others
 		
 //		If you are the sender.
-		else{console.log(data.notify);}
+		else{console.log(data.notify);
+		console.log(data.alert[3])}
 		
 		}//if exists
 		
@@ -77,8 +81,27 @@ socket.on('alert_message', function(data) {
 		console.warn(data.notify);		
 });	//send alert message
 
+//-----------------------------------------	| Find the owner of a written message.
 
-
+socket.on('find_owner', function(data) {
+//		check to see if the message exists	and owner exists	
+		if(typeof data.owner!== "undefined" && typeof data.findOwner!== "undefined"){
+			if(data.findOwner==user_id){
+				
+				swal({  
+				allowEscapeKey: false,
+				closeOnConfirm:false,
+				allowOutsideClick:false,
+				title: 'Warning',   
+				text: data.owner[4],   
+				type: 'warning'},
+				function(isConfirm) {if(isConfirm){location.reload();}})
+				setTimeout(function(){location.reload();},10000);
+			}
+//		check if you are the sender.
+		
+		}//if exists	
+});	//find owner
 
     $(".unicode-table").on("click", function(event) {
 		

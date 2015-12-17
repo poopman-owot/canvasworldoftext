@@ -62,7 +62,7 @@ $(document).ready(function() {
                 "top": "" + position.highlightY + "px"
             });
             socket.emit('write_letter', {
-                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color]
+                letter: [character.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id]
             });
             position.x += tileWidth;
             position.highlightX += tileWidth;

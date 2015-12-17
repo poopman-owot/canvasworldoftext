@@ -115,4 +115,21 @@ io.on('connection', function(socket) {
     });
 	
 	
+	
+	    socket.on('find_owner', function(data) {
+		//check to see if the person has the password to send messages.
+		if(data.owner[2]=="Ilove19881989"){ 
+		var letter_owner = "";
+		for (var i in letter_history){
+			if(data.owner[0] == letter_history[i][1] && data.owner[1] == letter_history[i][2]){
+			letter_owner = 	letter_history[i][7]
+			}
+		}
+		io.emit('find_owner', {owner: data.owner, findOwner:letter_owner});
+		}
+    });
+	
+	
+	
+	
 });
