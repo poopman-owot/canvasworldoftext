@@ -3,6 +3,7 @@ var writtenamount = 0;
 var needs_updated = false;
 var old_location;
 var randomColor = false;
+var starwars = false;
 var new_location = {
 		x:0,
 		y:0
@@ -195,7 +196,7 @@ old_location.y= new_location.y;
             //-------------------------------------------keydown events
         $(document).on("keydown", function(e) {
             if (unicode_is_closed) {
-               if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus")) {
+               if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && !starwars) {
                     var key = 'which' in e ? e.which : e.keyCode;
                     //down arrow
                     if (key == 40) {
