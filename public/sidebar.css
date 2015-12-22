@@ -199,3 +199,11 @@ button.toolbar-tool.jscolor {
     border-radius: 100px;
     font-size: 0px;
 }
+
+#input-x,#input-y
+{
+	    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    font-size: 20px;
+}
