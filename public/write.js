@@ -1,6 +1,7 @@
 var teleport = function(){};
 var sendalert = function() {};
 var findOwner = function() {};
+var protect = function(){};
 $(document).ready(function() {
 
 var tileWidth = 10;
@@ -12,8 +13,8 @@ var pixelData;
 var character;
 var dragContainer;
 var flipX = 0;
-
-
+var isCtrl = false;
+var can_admin = false;
 var defaultuser = "anon"+Math.random();
 var user_id = Math.random();
 var oldname =" ";
@@ -134,7 +135,7 @@ var updateArea = function (){
 //		if you have random color on do random colors		
 		else if (randomColor){ color = ("#"+Math.floor(16777215*Math.random()).toString(16))};
 //		send the letter data to socket.
-
+console.log(user_id)
 		socket.emit('write_letter', {letter: [one_letter.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id]});
 //		move the positions on the page over a character space.
 		position.x += tileWidth;position.highlightX += tileWidth;
@@ -147,8 +148,10 @@ var updateArea = function (){
 		socket.on('write_letter', function(data) {
 //		Data.letter is all of the letter information			
 		var letter = data.letter;
-
 //		write the letter to the canvas.
+if(data.background!==""){
+	var g = new createjs.Graphics().beginFill(data.background).drawRect(letter[1], letter[2] - 1, letter[4], letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
+}
 		var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
 //		make the location of the text.
 		text.x = letter[1];
@@ -306,13 +309,21 @@ var world = {
 		if (typeof capture[0] !== "undefined") {
 //		check if capture is a newline character, if it is, trigger enter.
 		if (capture == "\n") {world.triggerEnter();return;}
+		if(isCtrl && can_admin && capture[0] == " "){
+			capture = " ";
+		}
 //		if it is not a newline, paste the data
 		paste(capture);
 		}//end of not undefined,
 });
 
-
-
+$(document).on("keyup", function(e) {
+	var key = 'which' in e ? e.which : e.keyCode;
+	if (key == 17) {
+				isCtrl = false;
+				
+			}
+})
 
 //-----------------------------------------	| KEYDOWN EVENTS
 		$(document).on("keydown", function(e) {
@@ -331,6 +342,10 @@ var world = {
 		if (key == 9) {world.moveCursor("tab");}
 //		backspace
 		if (key == 8) {write(" ");world.moveCursor("backspace");}
+			if (key == 17) {
+				isCtrl = true;
+				
+			}
 		}//only if others are not selected
 });
 
@@ -468,7 +483,12 @@ socket.on('alert_message', function(data) {
 });	//send alert message
 
 
-
+socket.on('admin', function(data) {
+	if (user_id==data.id[1]){
+	can_admin = true;
+	user_id = data.id[0];
+	}
+})
 //-----------------------------------------	| Find the owner of a written message.
 socket.on('find_owner', function(data) {
 	
@@ -481,7 +501,9 @@ socket.on('find_owner', function(data) {
 		}//if exists	
 });	//find owner
 
-
+protect = function(amount){
+socket.emit('admin', {admin:[amount,user_id],})
+}
 
 //================================	| SIDEBAR BUTTONS		
 //		when the increase size of text icon is clicked, make the font size bigger

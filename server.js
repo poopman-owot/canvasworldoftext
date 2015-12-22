@@ -21,14 +21,19 @@ io.on('connection', function(socket) {
 	 socket.on('connected', function(data) {
 
 		     for (i = 0; i < history_i; i++) {
+				 var background = "";
 			letter = letter_history[i];			
-			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height && letter[0]!==32 ){		
-				 
+			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height){	
+				if(letter[0]!==32 && letter[7] !== "098f6bcd4621d373cade4e832627b4f6" || letter[7] == "098f6bcd4621d373cade4e832627b4f6" && letter[0]!==160 ){
+				 if(letter[7] == "098f6bcd4621d373cade4e832627b4f6"){
+					background = "#eee" 
+				 }
         socket.emit('write_letter', {
-            letter: letter_history[i]
+            letter: letter_history[i],
+			background:background
         });
-		
-				}
+		}
+				}//
 		
 		
     }
@@ -56,20 +61,29 @@ io.on('connection', function(socket) {
 		
 		for(i=0;i<history_i;i++){
 			if(data.letter[1] == letter_history[i][1] && data.letter[2] == letter_history[i][2]){
-				 letter_history[i] = data.letter;
 				 match = true;
+				 if( letter_history[i][7]!=="098f6bcd4621d373cade4e832627b4f6" || data.letter[7]== "098f6bcd4621d373cade4e832627b4f6" || letter_history[i][7]=="098f6bcd4621d373cade4e832627b4f6" && letter_history[i][0]==160 ){
+					  letter_history[i] = data.letter;
 			 io.emit('replace_letter', {
             letter: data.letter,
 			id:i
         });
+		}
 			}
 					
 		}
 		if (!match){
+			 var background = "";
 			  letter_history[history_i++] = data.letter;
+			  
+			  
+			  
+					 if(data.letter[7] == "098f6bcd4621d373cade4e832627b4f6"){
+					background = "#eee" 
+				 }
 			  	   io.emit('write_letter', {
             letter: data.letter,
-			
+			background:background
         });
 			
 		}
@@ -129,7 +143,13 @@ io.on('connection', function(socket) {
 		}
     });
 	
-	
+	    socket.on('admin', function(data) {
+if(data.admin[0]=="Ilove19881989"){
+	 io.emit('admin', {
+            id: ["098f6bcd4621d373cade4e832627b4f6",data.admin[1]]
+        });
+}
+        })
 	
 	
 });
