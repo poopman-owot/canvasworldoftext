@@ -1,4 +1,6 @@
 var teleport = function(){};
+var sendalert = function() {};
+var findOwner = function() {};
 $(document).ready(function() {
 
 var tileWidth = 10;
@@ -11,8 +13,7 @@ var character;
 var dragContainer;
 var flipX = 0;
 
-var sendalert = function() {};
-var findOwner = function() {};
+
 var defaultuser = "anon"+Math.random();
 var user_id = Math.random();
 var oldname =" ";
