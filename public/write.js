@@ -2,6 +2,7 @@ var teleport = function(){};
 var sendalert = function() {};
 var findOwner = function() {};
 var protect = function(){};
+var w = {};
 $(document).ready(function() {
 
 var tileWidth = 10;
@@ -31,9 +32,10 @@ var position = {
     clickX: 0,
     clickY: 0,
     highlightX: 0,
+    highlightX: 0,
     highlightY: 0
 };
-function reposition(type){
+function reposition(type,x,y){
 	if(type == "getpos"){
 		position.x = stage.mouseX - dragContainer.x;
 		position.y = stage.mouseY - dragContainer.y;
@@ -68,6 +70,17 @@ function reposition(type){
 		$("#highlight").height(tileHeight).width(tileWidth);
 		$(document).one("input click",function(){$("#highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});})
 	
+	}
+	else if(type == "setSelected"){
+		position.x = x*tileWidth - dragContainer.x;
+		position.y = y*(-tileHeight) - dragContainer.y;
+		position.x = (Math.ceil(position.x / tileWidth) * tileWidth) - tileWidth;
+		position.y = (Math.ceil(position.y / tileHeight) * tileHeight) - tileHeight;
+		position.highlightX = (Math.ceil(position.x / tileWidth) * tileWidth) + dragContainer.x;
+		position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) + dragContainer.y;
+		position.clickX = position.highlightX;
+		position.clickY = position.highlightY;
+		$("#highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
 	}
 }
 
@@ -135,7 +148,6 @@ var updateArea = function (){
 //		if you have random color on do random colors		
 		else if (randomColor){ color = ("#"+Math.floor(16777215*Math.random()).toString(16))};
 //		send the letter data to socket.
-console.log(user_id)
 		socket.emit('write_letter', {letter: [one_letter.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id]});
 //		move the positions on the page over a character space.
 		position.x += tileWidth;position.highlightX += tileWidth;
@@ -247,7 +259,9 @@ var world = {
 		reposition("enter");
     },
 //		this moves the cursor is a specific direction
-    moveCursor: function(dir) {
+    moveCursor: function(dir,amount) {
+		if(typeof amount == "undefined"){amount = 1;}
+		for(i=0;i<amount;i++){
         if (dir == "right") {
             $("#highlight").css({
                 "left": "" + (position.highlightX + tileWidth) + "px",
@@ -298,12 +312,26 @@ var world = {
             position.highlightX -= (tileWidth * 2);
             position.x -= (tileWidth * 2);
         }
-    }
+}},
+eraseCell: function(character){
+if(typeof character == "undefined"){character = " ";}
+write(character[0]);
+world.moveCursor("left");	
+}
 };
-
+w = {
+	triggerEnter: world.triggerEnter,
+	moveCursor: world.moveCursor,
+	typeChar: function(letter){paste(letter);},
+	setSelected: function(x,y){reposition("setSelected",x,y);},
+	getCellCoords: function(){return [(position.x/tileWidth)+1, -((position.y/tileHeight)+1)]},
+	eraseCell: world.eraseCell
+	
+}
 
 //-----------------------------------------	| whenver capture gets input data
         $("#capture").on("input", function() {
+			
 		var capture = $("#capture").val();
 //		check if capture is defined
 		if (typeof capture[0] !== "undefined") {
@@ -315,7 +343,8 @@ var world = {
 //		if it is not a newline, paste the data
 		paste(capture);
 		}//end of not undefined,
-});
+
+		});
 
 $(document).on("keyup", function(e) {
 	var key = 'which' in e ? e.which : e.keyCode;

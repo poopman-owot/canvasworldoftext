@@ -31,6 +31,7 @@ io.on('connection', function(socket) {
         socket.emit('write_letter', {
             letter: letter_history[i],
 			background:background
+			
         });
 		}
 				}//
