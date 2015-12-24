@@ -671,6 +671,9 @@ linkText="";
 else if((/^javascript:/).test($("#url-link").val())){
 linkText = $("#url-link").val();
 var placeholder = $("#url-link-text").val();
+if(placeholder == ""){
+	placeholder = linkText;
+}
     for (var i in placeholder) {
 		write(placeholder[i], "red" ,linkText);
 	}
