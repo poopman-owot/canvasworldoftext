@@ -4,7 +4,7 @@ var findOwner = function() {};
 var protect = function(){};
 var w = {};
 $(document).ready(function() {
-
+var linkText = "";
 var tileWidth = 10;
 var tileHeight = 18;
 var textSize = 15;
@@ -25,7 +25,6 @@ var chat_is_closed = true;
 var unicode_is_closed = true;
 var needs_updated = false;
 var randomColor = false;
-var swal_is_open = false
 var position = {
     x: 0,
     y: 0,
@@ -72,9 +71,9 @@ function reposition(type,x,y){
 	
 	}
 	else if(type == "setSelected"){
-		position.x = x*tileWidth - dragContainer.x;
-		position.y = y*(-tileHeight) - dragContainer.y;
-		position.x = (Math.ceil(position.x / tileWidth) * tileWidth) - tileWidth;
+		position.x = (x*tileWidth)+tileWidth
+		position.y = -(y*tileHeight)+tileHeight
+		position.x = ((Math.ceil(position.x / tileWidth) * tileWidth) - tileWidth);
 		position.y = (Math.ceil(position.y / tileHeight) * tileHeight) - tileHeight;
 		position.highlightX = (Math.ceil(position.x / tileWidth) * tileWidth) + dragContainer.x;
 		position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) + dragContainer.y;
@@ -142,13 +141,19 @@ var updateArea = function (){
 		
 		
 //-----------------------------------------	| public function which writes a letter to the canvas.
-  var write = function(one_letter, color) {
+  var write = function(one_letter, color,url) {
+	  if(typeof url == "undefined"){url = linkText;}
+	  if(url !==""){
+		  color = "rgb(0, 0, 255)"
+	  }
 // 		if you dont specify a color the color is the jscolor      
 		if(typeof color == "undefined" && !randomColor){color = document.getElementById("jscolor_id").style.backgroundColor}
+		if(typeof url == "undefined"){url = linkText;}
+
 //		if you have random color on do random colors		
 		else if (randomColor){ color = ("#"+Math.floor(16777215*Math.random()).toString(16))};
 //		send the letter data to socket.
-		socket.emit('write_letter', {letter: [one_letter.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id]});
+		socket.emit('write_letter', {letter: [one_letter.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id,url]});
 //		move the positions on the page over a character space.
 		position.x += tileWidth;position.highlightX += tileWidth;
 //		Move the highlight location. | TODO: make the highlight on the canvas.
@@ -208,8 +213,8 @@ teleport= function(x,y) {
 dragContainer.x = Math.ceil(x * -1000);
 dragContainer.y = Math.ceil(y * 1000);
 //		recalculate the coords
-		$("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)-1));
-		$("#coord-y").text(" Y: " + (((Math.ceil(offset.y / 1000)) * -1)+1));
+		$("#coord-x").text("X: " + x);
+		$("#coord-y").text(" Y: " + y);
 		updateArea();
 //		reset the location.
 		old_location.x = new_location.x;
@@ -244,7 +249,7 @@ dragContainer.y = Math.ceil(y * 1000);
 //-----------------------------------------	| Just like ywot, constantly selects the input
         setInterval(function() {
 //		if the unicode table is not open, if the chatinput is not selected, and if the nickname is not selected
-		if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && unicode_is_closed && !swal_is_open) {
+		if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && unicode_is_closed && !$(".swal-input").is(":focus") ) {
 //		then select the input for the canvas
 		$("#capture").select();
 		}//if others or not selcted
@@ -324,9 +329,8 @@ w = {
 	moveCursor: world.moveCursor,
 	typeChar: function(letter){paste(letter);},
 	setSelected: function(x,y){reposition("setSelected",x,y);},
-	getCellCoords: function(){return [(position.x/tileWidth)+1, -((position.y/tileHeight)+1)]},
-	eraseCell: world.eraseCell
-	
+	getCellCoords: function(){return [position.x/tileWidth,-position.y/tileHeight]},
+	eraseCell: world.eraseCell	
 }
 
 //-----------------------------------------	| whenver capture gets input data
@@ -357,7 +361,7 @@ $(document).on("keyup", function(e) {
 //-----------------------------------------	| KEYDOWN EVENTS
 		$(document).on("keydown", function(e) {
 //		if the unicode table is closed, nich and chatinput are not selected			
-		if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && unicode_is_closed) {
+		if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && unicode_is_closed && !$(".swal-input").is(":focus")) {
 		var key = 'which' in e ? e.which : e.keyCode;
 //		down arrow
 		if (key == 40) {world.moveCursor("down");}
@@ -511,6 +515,24 @@ socket.on('alert_message', function(data) {
 		console.warn(data.notify);		
 });	//send alert message
 
+//-----------------------------------------	| this is ran when a link is detected when the user ctrl-clicks a char.
+socket.on('url_link', function(data) {
+if(data.location !== ""){
+	
+swal({
+    title: 'You have clicked a url link.',
+    text: 'url: '+data.location,
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Go to link'
+}, function() {
+document.location = data.location
+});
+}
+});	//urllink
+
+
 
 socket.on('admin', function(data) {
 	if (user_id==data.id[1]){
@@ -533,6 +555,13 @@ socket.on('find_owner', function(data) {
 protect = function(amount){
 socket.emit('admin', {admin:[amount,user_id],})
 }
+
+
+$(document).on("click",function(){
+	if(isCtrl){
+	socket.emit('url_link',{location:[position.x,position.y]})	
+	}
+})
 
 //================================	| SIDEBAR BUTTONS		
 //		when the increase size of text icon is clicked, make the font size bigger
@@ -580,6 +609,14 @@ $(".overlay").on("click", function() { $(".unicode-table").hide();unicode_is_clo
 
 
 
+
+
+
+
+
+
+
+
 //-----------------------------------------	| when a toolbar tool is clicked
 $(".toolbar-tool").on("click", function() {
 
@@ -611,10 +648,45 @@ $(".toolbar-tool").on("click", function() {
 //		if the chatbar is already open then hide it and now its closed.
 		else {$(".unicode-table").hide();unicode_is_closed = true;}
         }//unicode
-		
+		else if ($(this).data("tooltip") == "Create a URL Link") {
+			swal({
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    confirmButtonText: 'Create URL link',
+    cancelButtonText: 'Cancel',
+    confirmButtonClass: 'confirm-class',
+    cancelButtonClass: 'cancel-class',
+    title: "URL link",
+    html: "Enter the url link that you would like to use.<br/><input class='swal-input' id='url-link' placeholder='URL link here'><input class='swal-input' id='url-link-text' placeholder='Enter link placeholder'>"
+},function(){
+if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)$/).test($("#url-link").val())){
+linkText = $("#url-link").val();
+var placeholder = $("#url-link-text").val();
+    for (var i in placeholder) {
+		write(placeholder[i], "red" ,linkText);
+	}
+
+linkText="";
+}
+else if((/^javascript:/).test($("#url-link").val())){
+linkText = $("#url-link").val();
+var placeholder = $("#url-link-text").val();
+    for (var i in placeholder) {
+		write(placeholder[i], "red" ,linkText);
+	}
+linkText="";
+}
+else{swal({
+	title:"Not valid",
+	text: "Make sure that the URL starts with 'http' or 'https'"
+	
+	
+});}
+})
+		}
 		else if ($(this).data("tooltip") == "Teleport") {
 		
-swal_is_open = true;
+
 swal({
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
@@ -624,7 +696,7 @@ swal({
     cancelButtonClass: 'cancel-class',
     closeOnCancel: false,
     title: "Teleport",
-    html: "Enter the coordinates that you would like to teleport to.<input id='input-x' placeholder='Enter x coordinate'><input id='input-y' placeholder='Enter y coordinate'>"
+    html: "Enter the coordinates that you would like to teleport to.<input class='swal-input' id='input-x' placeholder='Enter x coordinate'><input  class='swal-input' id='input-y' placeholder='Enter y coordinate'>"
 }, function(isConfirm) {
 	if($("#input-x").val() == ""){
 		$("#input-x").val(0)
@@ -635,7 +707,6 @@ swal({
     if (isConfirm && (/^-?\d{0,5}.\d{0,5}$/).test($("#input-x").val()) && (/^-?\d{0,5}.\d{0,5}$/).test($("#input-y").val()) ) {
        if($("#input-x").val()<31000 && $("#input-y").val()<31000 ){
 	   teleport($("#input-x").val(), $("#input-y").val());
-		swal_is_open = false;
 		}
 		else{
 			alert('Teleport has been canceled, the number was too high.');
@@ -643,7 +714,6 @@ swal({
     }
     else {
         swal('Cancelled', 'Teleport has been canceled', 'error');
-		swal_is_open = false;
     }
 });	
 
@@ -699,7 +769,7 @@ swal({
 		$("#canvas, #cursor").css("cursor","none");		
 //----If the cursor is colorize 
 		if($("#cursor").text() == "colorize"){
-//		check position of mouse on the screen.	
+//		check position of mouse on the screen.		
 		var pos = findPos(this);
 //		get x an y coords
 		var x = e.pageX - pos.x;
@@ -718,5 +788,5 @@ swal({
 		}//end if colorized
 		}//end if mouse hide
     });//end mousemove toggled
-	
+	document.write = function(){}
     }); //ready

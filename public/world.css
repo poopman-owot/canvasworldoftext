@@ -292,7 +292,7 @@ button.toolbar-tool.jscolor {
     font-size: 0px;
 }
 
-#input-x,#input-y
+.swal-input
 {
 	    margin: 10px;
     padding: 5px;

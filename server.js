@@ -102,6 +102,34 @@ io.on('connection', function(socket) {
 
     });
 	
+	socket.on('url_link', function(data) {
+		var x = data.location[0];
+		var y = data.location[1];
+		
+for (i = 0; i < history_i; i++) {
+	if(x== letter_history[i][1] && y == letter_history[i][2]){
+if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)$/).test(letter_history[i][8])){
+
+
+
+ io.emit('url_link', {
+            location: letter_history[i][8]
+        });
+		
+		
+		}
+		else if ((/^javascript:/).test(letter_history[i][8])){
+		 io.emit('url_link', {
+            location: letter_history[i][8]
+        });
+		}
+		
+	return 
+	}
+		
+	
+};	
+	})
 	
     socket.on('say_message', function(data) {
         msg = data.message;
