@@ -677,7 +677,7 @@ var placeholder = $("#url-link-text").val();
 linkText="";
 }
 else{
-	setInterval(function(){
+	setTimeout(function(){
 		swal({
 	title:"Not valid",
 	text: "Make sure that the URL starts with 'http' or 'https'"
