@@ -676,12 +676,16 @@ var placeholder = $("#url-link-text").val();
 	}
 linkText="";
 }
-else{swal({
+else{
+	setInterval(function(){
+		swal({
 	title:"Not valid",
 	text: "Make sure that the URL starts with 'http' or 'https'"
 	
 	
-});}
+});
+	},200)
+}
 })
 		}
 		else if ($(this).data("tooltip") == "Teleport") {
