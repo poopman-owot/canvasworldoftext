@@ -718,15 +718,15 @@ swal({
 		$("#input-y").val(0)
 	}
     if (isConfirm && (/^-?\d{0,5}.\d{0,5}$/).test($("#input-x").val()) && (/^-?\d{0,5}.\d{0,5}$/).test($("#input-y").val()) ) {
-       if($("#input-x").val()<31000 && $("#input-y").val()<31000 ){
+       if($("#input-x").val()<=31000 && $("#input-y").val()<=31000 && $("#input-x").val()>=-31000 && $("#input-y").val()>=-31000){
 	   teleport($("#input-x").val(), $("#input-y").val());
 		}
 		else{
-			alert('Teleport has been canceled, the number was too high.');
+			setTimeout(function(){swal('Canceled', 'Teleport has been canceled, the number was too high.', 'error');},200)
 		}
     }
     else {
-        swal('Cancelled', 'Teleport has been canceled', 'error');
+        swal('Canceled'', 'Teleport has been canceled', 'error');
     }
 });	
 
