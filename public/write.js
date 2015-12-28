@@ -557,10 +557,10 @@ socket.emit('admin', {admin:[amount,user_id],})
 }
 
 
-$(document).on("click",function(){
-	if(isCtrl){
+$(document).on("dblclick",function(){
+
 	socket.emit('url_link',{location:[position.x,position.y]})	
-	}
+
 })
 
 //================================	| SIDEBAR BUTTONS		
@@ -662,6 +662,9 @@ $(".toolbar-tool").on("click", function() {
 if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)$/).test($("#url-link").val())){
 linkText = $("#url-link").val();
 var placeholder = $("#url-link-text").val();
+if(placeholder.length == 0){
+	placeholder = $("#url-link").val();
+}
     for (var i in placeholder) {
 		write(placeholder[i], "red" ,linkText);
 	}
@@ -671,8 +674,8 @@ linkText="";
 else if((/^javascript:/).test($("#url-link").val())){
 linkText = $("#url-link").val();
 var placeholder = $("#url-link-text").val();
-if(placeholder == ""){
-	placeholder = linkText;
+if(placeholder.length == 0){
+	placeholder = $("#url-link").val();
 }
     for (var i in placeholder) {
 		write(placeholder[i], "red" ,linkText);
@@ -690,6 +693,9 @@ else{
 	},200)
 }
 })
+		}
+		else if ($(this).data("tooltip") == "About") {
+			document.location.href= document.location.href+"/about"
 		}
 		else if ($(this).data("tooltip") == "Teleport") {
 		
