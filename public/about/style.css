@@ -50,21 +50,21 @@
 
 /* Base for label styling */
 
-[type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
+[type="radio"]:not(:checked),
+[type="radio"]:checked {
   position: absolute;
   left: -9999px;
 }
 
-.dropdown-checkbox[type="checkbox"]:not(:checked) +label {
+.dropdown-checkbox[type="radio"]:not(:checked) +label {
   height: 60px;
 }
 
-.dropdown-checkbox[type="checkbox"]:checked + label {
+.dropdown-checkbox[type="radio"]:checked + label {
   height: auto;
 }
 
-.dropdown-checkbox[type="checkbox"]:checked + label span {
+.dropdown-checkbox[type="radio"]:checked + label span {
   background: black;
   -ms-transform: rotate(180deg);
   /* IE 9 */
