@@ -23,7 +23,9 @@ io.on('connection', function(socket) {
 		     for (i = 0; i < history_i; i++) {
 				 var background = "";
 			letter = letter_history[i];			
-			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY <letter[2] && letter[2]<-data.dragContainerY+data.height){	
+			 	if(-data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY-letter[5] <letter[2] && letter[2]<-data.dragContainerY+data.height){
+if(letter[0]==32 && letter[7] !== "098f6bcd4621d373cade4e832627b4f6" ){letter_history[i] = 0}
+				
 				if(letter[0]!==32 && letter[7] !== "098f6bcd4621d373cade4e832627b4f6" || letter[7] == "098f6bcd4621d373cade4e832627b4f6" && letter[0]!==160 ){
 				 if(letter[7] == "098f6bcd4621d373cade4e832627b4f6"){
 					background = "#eee" 
@@ -59,16 +61,37 @@ io.on('connection', function(socket) {
 	
     socket.on('write_letter', function(data) {
 		match = false;
-		
+		var replaced = 0;
 		for(i=0;i<history_i;i++){
-			if(data.letter[1] == letter_history[i][1] && data.letter[2] == letter_history[i][2]){
+			if(Math.abs(data.letter[1]-letter_history[i][1]) < (data.letter[4]) && Math.abs(data.letter[2]-letter_history[i][2]) < (data.letter[5]) &&  (data.letter[1]-letter_history[i][1]) <= 0 && (data.letter[2]-letter_history[i][2]) <= 0){
 				 match = true;
 				 if( letter_history[i][7]!=="098f6bcd4621d373cade4e832627b4f6" || data.letter[7]== "098f6bcd4621d373cade4e832627b4f6" || letter_history[i][7]=="098f6bcd4621d373cade4e832627b4f6" && letter_history[i][0]==160 ){
+					  
+				if(data.letter[1] == letter_history[i][1] && data.letter[2] == letter_history[i][2] )	  {
+					  
 					  letter_history[i] = data.letter;
 			 io.emit('replace_letter', {
             letter: data.letter,
 			id:i
         });
+		replaced = 1;
+		 }
+		 else if (!replaced){
+					  
+	  
+					  letter_history[i] = data.letter;
+			 io.emit('replace_letter', {
+            letter: data.letter,
+			id:i
+        });
+		replaced = 1;
+			 }
+				 		else {
+					  
+					 letter_history[i][0] = 0;
+		
+			 }
+
 		}
 			}
 					

@@ -3,6 +3,7 @@ var sendalert = function() {};
 var findOwner = function() {};
 var protect = function(){};
 var w = {};
+console.log = function(a){return a};
 $(document).ready(function() {
 var linkText = "";
 var tileWidth = 10;
@@ -15,6 +16,7 @@ var character;
 var dragContainer;
 var flipX = 0;
 var isCtrl = false;
+var isShift = false;
 var can_admin = false;
 var defaultuser = "anon"+Math.random();
 var user_id = Math.random();
@@ -25,6 +27,7 @@ var chat_is_closed = true;
 var unicode_is_closed = true;
 var needs_updated = false;
 var randomColor = false;
+var canPaste = true;
 var position = {
     x: 0,
     y: 0,
@@ -84,6 +87,8 @@ function reposition(type,x,y){
 }
 
 function paste(word) {
+if(canPaste){
+	canPaste = false;
     for (var i in word) {
         if (word[i] == "\n") {
             world.triggerEnter();
@@ -92,6 +97,9 @@ function paste(word) {
             write(word[i]);
         }
     }
+	word = "";
+	canPaste = true;
+	}
 }
 
 
@@ -151,7 +159,7 @@ var updateArea = function (){
 		if(typeof url == "undefined"){url = linkText;}
 
 //		if you have random color on do random colors		
-		else if (randomColor){ color = ("#"+Math.floor(16777215*Math.random()).toString(16))};
+		else if (randomColor && url == ""){ color = ("#"+Math.floor(16777215*Math.random()).toString(16))};
 //		send the letter data to socket.
 		socket.emit('write_letter', {letter: [one_letter.charCodeAt(0), position.x, position.y, textSize, tileWidth, tileHeight,color,user_id,url]});
 //		move the positions on the page over a character space.
@@ -260,11 +268,20 @@ dragContainer.y = Math.ceil(y * 1000);
 //-----------------------------------------	| similar to old wcammand of ywot
 var world = {
 //		this is called to create an enter equivelent	
-    triggerEnter: function() {
+    triggerEnter: function(amount) {
+		if(typeof amount == "undefined"){
+			amount = 1;
+		}
+		if(typeof amount == "string"){
+			amount = amount.length;
+		}
+		for(i=0;i<amount;i++){
 		reposition("enter");
+		}
     },
 //		this moves the cursor is a specific direction
     moveCursor: function(dir,amount) {
+		
 		if(typeof amount == "undefined"){amount = 1;}
 		for(i=0;i<amount;i++){
         if (dir == "right") {
@@ -301,12 +318,24 @@ var world = {
         }
 //		this moves the cursor 4 spaces right
         else if (dir == "tab") {
+			var sizeX = tileWidth;
+			var sizeY = 0;
+			var amount = 2;
+			if(isShift){
+world.triggerEnter(2);
+return false;
+			}
+
+			
             $("#highlight").css({
-                "left": "" + (position.highlightX + (tileWidth * 4)) + "px",
-                "top": "" + position.highlightY + "px"
+                "left": "" + (position.highlightX + (sizeX * amount)) + "px",
+                "top": "" + (position.highlightY + (sizeY * amount)) + "px"
             });
-            position.highlightX += (tileWidth * 4);
-            position.x += (tileWidth * 4);
+            position.highlightX += (sizeX * amount);
+            position.x += (sizeX * amount);
+			position.highlightY += (sizeY * amount);
+            position.y += (sizeY * amount);
+			
         }
 //		this moves the cursor backwards.	
         else if (dir == "backspace") {
@@ -317,6 +346,15 @@ var world = {
             position.highlightX -= (tileWidth * 2);
             position.x -= (tileWidth * 2);
         }
+		else {
+		//if the browser does not support table, just return an array.
+if (typeof console.table == "undefined") {console.table = function(a) {return a;};}
+console.table([{
+    direction: "left, right, up, down, tab, backspace",
+    amount: "sting, number, blank/undefined",
+    description: "w.moveCursor(direction,amount); If the amount is undefined, the function will run once. If the amount is a string, the function will run the strings length"
+}]);
+		}
 }},
 eraseCell: function(character){
 if(typeof character == "undefined"){character = " ";}
@@ -337,6 +375,7 @@ w = {
         $("#capture").on("input", function() {
 			
 		var capture = $("#capture").val();
+		$("#capture").val("");
 //		check if capture is defined
 		if (typeof capture[0] !== "undefined") {
 //		check if capture is a newline character, if it is, trigger enter.
@@ -346,6 +385,7 @@ w = {
 		}
 //		if it is not a newline, paste the data
 		paste(capture);
+		capture = "";
 		}//end of not undefined,
 
 		});
@@ -356,13 +396,19 @@ $(document).on("keyup", function(e) {
 				isCtrl = false;
 				
 			}
+				if (key == 16) {
+				isShift = false;
+				
+			}
+			
 })
 
 //-----------------------------------------	| KEYDOWN EVENTS
 		$(document).on("keydown", function(e) {
+					var key = 'which' in e ? e.which : e.keyCode;
 //		if the unicode table is closed, nich and chatinput are not selected			
 		if (!$(".chatinput").is(":focus") && !$("#nick").is(":focus") && unicode_is_closed && !$(".swal-input").is(":focus")) {
-		var key = 'which' in e ? e.which : e.keyCode;
+
 //		down arrow
 		if (key == 40) {world.moveCursor("down");}
 //		right arrow
@@ -372,14 +418,14 @@ $(document).on("keyup", function(e) {
 //		left arrow
 		if (key == 37) {world.moveCursor("left");}
 //		tab
-		if (key == 9) {world.moveCursor("tab");}
+		if (key == 9) {e.preventDefault();
+				e.stopPropagation();world.moveCursor("tab");}
 //		backspace
 		if (key == 8) {write(" ");world.moveCursor("backspace");}
-			if (key == 17) {
-				isCtrl = true;
-				
-			}
 		}//only if others are not selected
+		if (key == 13 && $(".chatinput").is(":focus") && !isShift){e.preventDefault(); $("#send-btn").trigger("click");}
+		if (key == 17) {isCtrl = true;}
+		if (key == 16) {isShift = true;}
 });
 
 
@@ -660,6 +706,7 @@ $(".toolbar-tool").on("click", function() {
     html: "Enter the url link that you would like to use.<br/><input class='swal-input' id='url-link' placeholder='URL link here'><input class='swal-input' id='url-link-text' placeholder='Enter link placeholder'>"
 },function(){
 if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)$/).test($("#url-link").val())){
+	fontSize("bigger"); fontSize("smaller"); fontSize("smaller"); fontSize("smaller");
 linkText = $("#url-link").val();
 var placeholder = $("#url-link-text").val();
 if(placeholder.length == 0){
@@ -726,7 +773,7 @@ swal({
 		}
     }
     else {
-        swal('Canceled'', 'Teleport has been canceled', 'error');
+        swal('Canceled', 'Teleport has been canceled', 'error');
     }
 });	
 
