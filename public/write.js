@@ -191,7 +191,7 @@ if(data.background!==""){
 //		all letter information from server
 		letter = data.letter;
 //		cover old text with white square. | TODO : remove letter from canvas instead of hiding it.
-		var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1], letter[2] - 1, letter[4], letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
+		var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1]-1, letter[2] - 1, letter[4]+1, letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
 //		write the letter to the canvas.
 		var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
 //		make the location of the text.
