@@ -171,7 +171,7 @@ if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9
 	
     socket.on('alert_message', function(data) {
 		//check to see if the person has the password to send messages.
-		if(data.alert[1]=="Ilove19881989"){ 
+		if(data.alert[1]=="f831f40d33e621e1e837e21d1d59dd13"){ 
 		io.emit('alert_message', {alert: data.alert, notify:"Message sent."});
 		}
 		//if the wrong pass is place, send an error.
@@ -184,7 +184,7 @@ if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9
 	
 	    socket.on('find_owner', function(data) {
 		//check to see if the person has the password to send messages.
-		if(data.owner[2]=="Ilove19881989"){ 
+		if(data.owner[2]=="f831f40d33e621e1e837e21d1d59dd13"){ 
 		var letter_owner = "";
 		for (var i in letter_history){
 			if(data.owner[0] == letter_history[i][1] && data.owner[1] == letter_history[i][2]){
@@ -196,7 +196,7 @@ if((/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9
     });
 	
 	    socket.on('admin', function(data) {
-if(data.admin[0]=="Ilove19881989"){
+if(data.admin[0]=="f831f40d33e621e1e837e21d1d59dd13"){
 	 io.emit('admin', {
             id: ["098f6bcd4621d373cade4e832627b4f6",data.admin[1]]
         });
