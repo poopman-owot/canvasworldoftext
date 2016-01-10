@@ -883,7 +883,9 @@ $("#capture").addClass("highlight")
 		})
 	}
 	
-	
+	jQuery( window ).on( "swipeleft", function( event ) {
+teleport((Math.ceil(offset.x / 1000)-1)+0.5)
+	} )
 	}); //ready
 	
 		
