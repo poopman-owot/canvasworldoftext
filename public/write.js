@@ -210,7 +210,7 @@ if(data.background!==""){
 		offset.x = stage.mouseX - dragContainer.x;
 		offset.y = stage.mouseY - dragContainer.y;
 //		once you have the offset, and tou are dragging, run the do drag
-		event.addEventListener("mousemove", doDrag
+		event.addEventListener("mousemove", doDrag)
 		event.addEventListener("vmousemove", doDrag);
 }
 		
