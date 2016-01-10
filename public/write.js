@@ -136,6 +136,7 @@ var updateArea = function (){
         var dragBox = new createjs.Shape(new createjs.Graphics().beginFill("#ffffff").drawRect(0, 0, stage.canvas.width, stage.canvas.height));
 //		when the mouse is down drag.		
         dragBox.addEventListener("mousedown", startDrag);
+		dragBox.addEventListener("vmousedown", startDrag);
 //		whenever the user click on the window thier click position is captured.
         dragBox.addEventListener("click", getPos);
 //		add the box to the stage.
@@ -209,7 +210,8 @@ if(data.background!==""){
 		offset.x = stage.mouseX - dragContainer.x;
 		offset.y = stage.mouseY - dragContainer.y;
 //		once you have the offset, and tou are dragging, run the do drag
-		event.addEventListener("mousemove", doDrag);
+		event.addEventListener("mousemove", doDrag
+		event.addEventListener("vmousemove", doDrag);
 }
 		
 //-----------------------------------------	| gets and sets all positions.
