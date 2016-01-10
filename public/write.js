@@ -884,7 +884,10 @@ $("#capture").addClass("highlight")
 	}
 	
 	jQuery( window ).on( "swipeleft", function( event ) {
-teleport((Math.ceil(offset.x / 1000)-1)+0.5,0)
+teleport((Math.ceil(offset.x / 1000)-1)+0.5,(((Math.ceil(offset.y / 1000)) * -1)+1))
+	} )
+		jQuery( window ).on( "swiperight", function( event ) {
+teleport((Math.ceil(offset.x / 1000)-1)-0.5,(((Math.ceil(offset.y / 1000)) * -1)+1))
 	} )
 	}); //ready
 	
