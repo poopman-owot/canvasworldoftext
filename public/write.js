@@ -877,8 +877,11 @@ swal({
 	if (isMobile.any()){
 		
 		setInterval(function(){
-			
-		});
+$("#capture").css({
+	"top":$("#highlight").css("top"),
+	"left":$("#highlight").css("left")
+})
+		})
 	}
 	
 	
