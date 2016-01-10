@@ -47,7 +47,7 @@ function reposition(type,x,y){
 		position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) + dragContainer.y;
 		position.clickX = position.highlightX;
 		position.clickY = position.highlightY;
-		$("#highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
+		$(".highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
 		}
 	else if(type == "enter"){
         position.x = position.clickX - dragContainer.x + tileWidth;
@@ -58,7 +58,7 @@ function reposition(type,x,y){
         position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) + dragContainer.y;
         position.clickX = position.highlightX;
         position.clickY = position.highlightY;
-		 $("#highlight").css({"left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px" });
+		 $(".highlight").css({"left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px" });
 	}
 	else if(type == "font"){
 		position.x = (Math.ceil(position.x / tileWidth) * tileWidth) - tileWidth;
@@ -69,8 +69,8 @@ function reposition(type,x,y){
 		position.y = (Math.ceil(position.y / tileHeight) * tileHeight) + tileHeight;
 		position.highlightX = (Math.ceil(position.x / tileWidth) * tileWidth) - dragContainer.x;
 		position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) - dragContainer.y;
-		$("#highlight").height(tileHeight).width(tileWidth);
-		$(document).one("input click",function(){$("#highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});})
+		$(".highlight").height(tileHeight).width(tileWidth);
+		$(document).one("input click",function(){$(".highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});})
 	
 	}
 	else if(type == "setSelected"){
@@ -82,7 +82,7 @@ function reposition(type,x,y){
 		position.highlightY = (Math.ceil(position.y / tileHeight) * tileHeight) + dragContainer.y;
 		position.clickX = position.highlightX;
 		position.clickY = position.highlightY;
-		$("#highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
+		$(".highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
 	}
 }
 
@@ -165,7 +165,7 @@ var updateArea = function (){
 //		move the positions on the page over a character space.
 		position.x += tileWidth;position.highlightX += tileWidth;
 //		Move the highlight location. | TODO: make the highlight on the canvas.
-		$("#highlight").css({"left": "" + (position.highlightX) + "px", "top": "" + position.highlightY + "px"});		
+		$(".highlight").css({"left": "" + (position.highlightX) + "px", "top": "" + position.highlightY + "px"});		
 };//write letter
 	
 
@@ -205,7 +205,7 @@ if(data.background!==""){
 //-----------------------------------------	| this is ran when you start to drag.
 		function startDrag(event) {
 //		move the highlight somewhere away.
-		$("#highlight").css({"left": "","top": ""});
+		$(".highlight").css({"left": "","top": ""});
 		offset.x = stage.mouseX - dragContainer.x;
 		offset.y = stage.mouseY - dragContainer.y;
 //		once you have the offset, and tou are dragging, run the do drag
@@ -285,7 +285,7 @@ var world = {
 		if(typeof amount == "undefined"){amount = 1;}
 		for(i=0;i<amount;i++){
         if (dir == "right") {
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX + tileWidth) + "px",
                 "top": "" + position.highlightY + "px"
             });
@@ -293,7 +293,7 @@ var world = {
             position.x += tileWidth;
         }
         else if (dir == "left") {
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX - tileWidth) + "px",
                 "top": "" + position.highlightY + "px"
             });
@@ -301,7 +301,7 @@ var world = {
             position.x -= tileWidth;
         }
         else if (dir == "up") {
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX) + "px",
                 "top": "" + (position.highlightY - tileHeight) + "px"
             });
@@ -309,7 +309,7 @@ var world = {
             position.y -= tileHeight;
         }
         else if (dir == "down") {
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX) + "px",
                 "top": "" + (position.highlightY + tileHeight) + "px"
             });
@@ -327,7 +327,7 @@ return false;
 			}
 
 			
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX + (sizeX * amount)) + "px",
                 "top": "" + (position.highlightY + (sizeY * amount)) + "px"
             });
@@ -339,7 +339,7 @@ return false;
         }
 //		this moves the cursor backwards.	
         else if (dir == "backspace") {
-            $("#highlight").css({
+            $(".highlight").css({
                 "left": "" + (position.highlightX - (tileWidth * 2)) + "px",
                 "top": "" + position.highlightY + "px"
             });
@@ -877,10 +877,7 @@ swal({
 	if (isMobile.any()){
 		
 		setInterval(function(){
-$("#capture").css({
-	"top":$("#highlight").css("top"),
-	"left":$("#highlight").css("left")
-})
+$("#capture").addClass("highlight")
 		})
 	}
 	
