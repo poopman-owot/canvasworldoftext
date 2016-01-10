@@ -522,6 +522,30 @@ var checkCheats = function(){
 
 
 
+//-----------------------------------------	| Check if a mobile device.
+    var isMobile = {
+        Android: function() {
+            return navigator.userAgent.match(/Android/i);
+        },
+        BlackBerry: function() {
+            return navigator.userAgent.match(/BlackBerry/i);
+        },
+        iOS: function() {
+            return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+        },
+        Opera: function() {
+            return navigator.userAgent.match(/Opera Mini/i);
+        },
+        Windows: function() {
+            return navigator.userAgent.match(/IEMobile/i);
+        },
+        any: function() {
+            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        }
+		
+};//check mobile
+
+
 //-----------------------------------------	| Sending messages on the chat area.
  socket.on('say_message', function(data) {	 
 //		init some the variables
@@ -848,5 +872,16 @@ swal({
 		}//end if colorized
 		}//end if mouse hide
     });//end mousemove toggled
-	document.write = function(){}
-    }); //ready
+	document.write = function(){};
+    
+	if (isMobile.any()){
+		
+		setInterval(function(){
+			
+		});
+	}
+	
+	
+	}); //ready
+	
+		
