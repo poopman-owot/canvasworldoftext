@@ -5,8 +5,10 @@ var protect = function(){};
 var w = {};
 var stage;
 var dragContainer;
+var dragContainerAlt;
 console.log = function(a){return a};
 $(document).on("ready pageinit",function() {
+var	clearContainer = false;
 var linkText = "";
 var tileWidth = 10;
 var tileHeight = 18;
@@ -124,9 +126,11 @@ dragContainerAlt.y = dragContainer.y
         stage.addChild(dragContainerAlt);
 dragContainerAlt.children = oldArray;
 dragContainer.children=[];
-setTimeout(function(){
-dragContainerAlt.children = [];
-},1000)
+setInterval(function(){
+	if(clearContainer){
+	dragContainerAlt.children=[];
+	clearContainer = false;
+}},100)
 				
 
 		socket.emit('connected',{
@@ -136,6 +140,10 @@ dragContainerAlt.children = [];
 			height: $(window).height()
 			
 		})}
+		
+		socket.on('clearContiner', function(){
+clearContainer=true;
+		})
 	
 //		Create two canvases the size of the window.
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
@@ -238,6 +246,8 @@ if(data.background!==""){
 teleport= function(x,y) {
 dragContainer.x = Math.ceil(x * -1000);
 dragContainer.y = Math.ceil(y * 1000);
+dragContainerAlt.x = Math.ceil(x * -1000);
+dragContainerAlt.y = Math.ceil(y * 1000);
 //		recalculate the coords
 		$("#coord-x").text(x);
 		$("#coord-y").text(y);
@@ -252,7 +262,8 @@ dragContainer.y = Math.ceil(y * 1000);
 //		reposition drag container
 		dragContainer.x = event.stageX - offset.x;
 		dragContainer.y = event.stageY - offset.y;
-	
+			dragContainerAlt.x = event.stageX - offset.x;
+		dragContainerAlt.y = event.stageY - offset.y;
 //		recalculate the coords
 		$("#coord-x").text((Math.ceil(offset.x / 1000)-1));
 		$("#coord-y").text((((Math.ceil(offset.y / 1000)) * -1)+1));

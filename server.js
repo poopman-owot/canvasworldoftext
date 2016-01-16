@@ -41,7 +41,7 @@ if(letter[0]==32 && letter[7] !== "098f6bcd4621d373cade4e832627b4f6" ){letter_hi
 		
     }
 		 
-		 
+		 io.emit('clearContiner');
 		 
 	 })
 	
@@ -95,7 +95,9 @@ if(letter[0]==32 && letter[7] !== "098f6bcd4621d373cade4e832627b4f6" ){letter_hi
 
 		}
 			}
-					
+	
+				
+			
 		}
 		if (!match){
 			 var background = "";
