@@ -6,7 +6,6 @@ var w = {};
 var stage;
 var dragContainer;
 var dragContainerAlt;
-console.log = function(a){return a};
 $(document).on("ready pageinit",function() {
 var	clearContainer = false;
 var linkText = "";
@@ -17,7 +16,6 @@ var socket = io.connect();
 var fontSize;
 var pixelData;
 var character;
-
 var flipX = 0;
 var isCtrl = false;
 var isShift = false;
@@ -143,6 +141,18 @@ setInterval(function(){
 		
 		socket.on('clearContiner', function(){
 clearContainer=true;
+setTimeout(function(){
+	for(i=dragContainer.children.length;i>0;i--){
+	if(typeof dragContainer.children[i] !== "undefined"){
+	if(typeof dragContainer.children[i].graphics !== "undefined"){
+
+//dragContainer.removeChildAt(i)	
+	
+
+	}}
+}
+	
+},5000)
 		})
 	
 //		Create two canvases the size of the window.
@@ -196,9 +206,11 @@ clearContainer=true;
 //		Data.letter is all of the letter information			
 		var letter = data.letter;
 //		write the letter to the canvas.
+var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1]-1, letter[2] - 1, letter[4]+1, letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
 if(data.background!==""){
 	var g = new createjs.Graphics().beginFill(data.background).drawRect(letter[1], letter[2] - 1, letter[4], letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
 }
+
 		var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
 //		make the location of the text.
 		text.x = letter[1];
