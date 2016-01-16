@@ -3,6 +3,8 @@ var sendalert = function() {};
 var findOwner = function() {};
 var protect = function(){};
 var w = {};
+var stage;
+var dragContainer;
 console.log = function(a){return a};
 $(document).on("ready pageinit",function() {
 var linkText = "";
@@ -13,7 +15,7 @@ var socket = io.connect();
 var fontSize;
 var pixelData;
 var character;
-var dragContainer;
+
 var flipX = 0;
 var isCtrl = false;
 var isShift = false;
@@ -115,8 +117,18 @@ var updateArea = function (){
 		x:dragContainer.x,
 		y:dragContainer.y
 	}
-	
-			dragContainer.removeAllChildren()
+var oldArray = dragContainer.children;
+dragContainerAlt = new createjs.Container();
+dragContainerAlt.x = dragContainer.x;
+dragContainerAlt.y = dragContainer.y
+        stage.addChild(dragContainerAlt);
+dragContainerAlt.children = oldArray;
+dragContainer.children=[];
+setTimeout(function(){
+dragContainerAlt.children = [];
+},1000)
+				
+
 		socket.emit('connected',{
 			dragContainerX: [dragContainer.x],
 			dragContainerY: [dragContainer.y],
@@ -128,10 +140,8 @@ var updateArea = function (){
 //		Create two canvases the size of the window.
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
 
-//		Create a stage for the highlights.
-        var stage_highlight = new createjs.Stage("canvas_highlight");
 //		Create a stage for the general canvas
-        var stage = new createjs.Stage("canvas");
+        stage = new createjs.Stage("canvas");
 //		This runs on every tick.		
         createjs.Ticker.addEventListener("tick", tick);		
 		function tick(event) {stage.update();}
@@ -187,11 +197,13 @@ if(data.background!==""){
 		text.y = letter[2];
 //		add text to canvas
 		dragContainer.addChild(text);
+		
 });//end write letter
 
 
 //-----------------------------------------	| this is ran when you recieve a replace_letter from the canvas.
 		socket.on('replace_letter', function(data) {
+
 //		all letter information from server
 		letter = data.letter;
 //		cover old text with white square. | TODO : remove letter from canvas instead of hiding it.
@@ -201,7 +213,8 @@ if(data.background!==""){
 //		make the location of the text.
 		text.x = letter[1];
 		text.y = letter[2];
-//		add text to canvas
+//		add text to canvas"
+
 		dragContainer.addChild(text);
 });//end replace letter
  
@@ -239,6 +252,7 @@ dragContainer.y = Math.ceil(y * 1000);
 //		reposition drag container
 		dragContainer.x = event.stageX - offset.x;
 		dragContainer.y = event.stageY - offset.y;
+	
 //		recalculate the coords
 		$("#coord-x").text((Math.ceil(offset.x / 1000)-1));
 		$("#coord-y").text((((Math.ceil(offset.y / 1000)) * -1)+1));
