@@ -146,7 +146,7 @@ setTimeout(function(){
 	if(typeof dragContainer.children[i] !== "undefined"){
 	if(typeof dragContainer.children[i].graphics !== "undefined"){
 
-dragContainer.removeChildAt(i)	
+//dragContainer.removeChildAt(i)	
 	
 
 	}}
