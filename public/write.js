@@ -4,7 +4,7 @@ var findOwner = function() {};
 var protect = function(){};
 var w = {};
 console.log = function(a){return a};
-$(document).ready(function() {
+$(document).on("ready pageinit",function() {
 var linkText = "";
 var tileWidth = 10;
 var tileHeight = 18;
@@ -85,6 +85,9 @@ function reposition(type,x,y){
 		$(".highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
 	}
 }
+function roundNumber (num,nearestNum){
+	return Math.max( Math.round((num) * 10) / 10 ).toFixed(nearestNum);
+};
 
 function paste(word) {
 if(canPaste){
@@ -136,7 +139,7 @@ var updateArea = function (){
         var dragBox = new createjs.Shape(new createjs.Graphics().beginFill("#ffffff").drawRect(0, 0, stage.canvas.width, stage.canvas.height));
 //		when the mouse is down drag.		
         dragBox.addEventListener("mousedown", startDrag);
-		dragBox.addEventListener("vmousedown", startDrag);
+		dragBox.addEventListener("touchstart", startDrag);
 //		whenever the user click on the window thier click position is captured.
         dragBox.addEventListener("click", getPos);
 //		add the box to the stage.
@@ -211,7 +214,7 @@ if(data.background!==""){
 		offset.y = stage.mouseY - dragContainer.y;
 //		once you have the offset, and tou are dragging, run the do drag
 		event.addEventListener("mousemove", doDrag)
-		event.addEventListener("vmousemove", doDrag);
+		event.addEventListener("touchstart", doDrag);
 }
 		
 //-----------------------------------------	| gets and sets all positions.
@@ -223,8 +226,8 @@ teleport= function(x,y) {
 dragContainer.x = Math.ceil(x * -1000);
 dragContainer.y = Math.ceil(y * 1000);
 //		recalculate the coords
-		$("#coord-x").text("X: " + x);
-		$("#coord-y").text(" Y: " + y);
+		$("#coord-x").text(x);
+		$("#coord-y").text(y);
 		updateArea();
 //		reset the location.
 		old_location.x = new_location.x;
@@ -237,8 +240,8 @@ dragContainer.y = Math.ceil(y * 1000);
 		dragContainer.x = event.stageX - offset.x;
 		dragContainer.y = event.stageY - offset.y;
 //		recalculate the coords
-		$("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)-1));
-		$("#coord-y").text(" Y: " + (((Math.ceil(offset.y / 1000)) * -1)+1));
+		$("#coord-x").text((Math.ceil(offset.x / 1000)-1));
+		$("#coord-y").text((((Math.ceil(offset.y / 1000)) * -1)+1));
 //		the the new position.
 		new_location = {x:dragContainer.x, y:dragContainer.y}
 }		// Update the stage
@@ -878,17 +881,38 @@ swal({
     
 	if (isMobile.any()){
 		
-		setInterval(function(){
+
+$("body").addClass("mobile")
 $("#capture").addClass("highlight")
-		})
 	}
-	
-	jQuery( window ).on( "swipeleft", function( event ) {
-teleport((Math.ceil(offset.x / 1000)-1)+1,(((Math.ceil(offset.y / 1000)) * -1)+1))
-	} )
-		jQuery( window ).on( "swiperight", function( event ) {
-teleport((Math.ceil(offset.x / 1000)-1)-1,(((Math.ceil(offset.y / 1000)) * -1)+1))
-	} )
+	//chat_is_closed
+$(window).on("swipeleft", function(event) {
+    if(chat_is_closed){
+		
+
+    teleport(roundNumber(($("#coord-x").text() - "") + 0.1,1), ($("#coord-y").text() - ""));
+    }
+});
+$(window).on("swiperight", function(event) {
+        if(chat_is_closed){
+    teleport(roundNumber(($("#coord-x").text() - "") - 0.1,1), ($("#coord-y").text() - ""));
+        }
+});
+$(window).on("swipeup", function(event) {
+        if(chat_is_closed){
+			
+    teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") - 0.1,1));
+        }
+});
+$(window).on("swipedown", function(event) {
+        if(chat_is_closed){
+			
+    teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") + 0.1,1));
+        }
+});
+$(".close_chat").on("click", function() {
+    $(".chatbtn").trigger("click");
+});
 	}); //ready
 	
 		
