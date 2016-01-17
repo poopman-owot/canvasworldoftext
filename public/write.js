@@ -118,6 +118,7 @@ var updateArea = function (){
 		y:dragContainer.y
 	}
 var oldArray = dragContainer.children;
+
 dragContainerAlt = new createjs.Container();
 dragContainerAlt.x = dragContainer.x;
 dragContainerAlt.y = dragContainer.y
@@ -127,6 +128,7 @@ dragContainer.children=[];
 setInterval(function(){
 	if(clearContainer){
 	dragContainerAlt.children=[];
+	stage.removeChild(dragContainerAlt);
 	clearContainer = false;
 }},100)
 				
