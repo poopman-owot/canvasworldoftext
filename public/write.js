@@ -129,6 +129,11 @@ setInterval(function(){
 	if(clearContainer){
 	dragContainerAlt.children=[];
 	stage.removeChild(dragContainerAlt);
+	if(stage.children.length !== 2){
+stage.removeChild(stage.children[stage.children.length-1])
+}
+
+
 	clearContainer = false;
 }},100)
 				
