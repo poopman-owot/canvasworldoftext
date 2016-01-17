@@ -134,7 +134,7 @@ stage.removeChild(stage.children[stage.children.length-1])
 }
 for(i = dragContainer.children.length; i>0;i--){
 if(typeof dragContainer.children[i] !== "undefined"){
-if(typeof dragContainer.children[i].graphics !== "undefined" && dragContainer.children[i].graphics.a()._instructions[2].params[1] == "#ffffff"){
+if(typeof dragContainer.children[i].graphics !== "undefined" && typeof dragContainer.children[i].graphics.a()._instructions[2] !== "undefined" && dragContainer.children[i].graphics.a()._instructions[2].params[1] == "#ffffff"){
 
 dragContainer.children.splice([i], 1);
 
