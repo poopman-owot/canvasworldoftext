@@ -10,7 +10,6 @@ html, body {
     top: -1000px;
     left: -1000px;
 }
-
 #highlight {
     display:block;
     width:10px;
@@ -186,7 +185,6 @@ input.jscolor {
 z-index: 1200;
 }
 
-
 .chatinput {
   resize: none;
   width: 380px;
@@ -199,15 +197,11 @@ z-index: 1200;
   overflow: hidden;
 }
 
-
-
 .type-area {
   position: absolute;
   bottom: 0;
   right: 0;
 }
-
-
 
 #send-btn {
   background-color: #249D7F;
@@ -292,8 +286,6 @@ overflow-wrap: break-word;
     border: 0 none;
     padding-left: 10px;
 }
-
-
 button.toolbar-tool.jscolor {
     border: 0 none;
     border-radius: 100px;
@@ -306,57 +298,4 @@ button.toolbar-tool.jscolor {
     padding: 5px;
     text-align: center;
     font-size: 20px;
-}
-.mobile .chatbar {
-width: 100%;
-    z-index: 2001;
-    right: 0px;
-}
-
-.mobile #nick{
-    width: 86%;
-}
-.mobile #send-btn {
-	    width: 10%;
-}
-.mobile .chatinput {
-width: 100%;
-    padding: 0;
-    padding-left: 0px;
-}
-.mobile .type-area {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-}
-.mobile #capture {
-    position: fixed;
-	background:#DDD;
-	opacity:0.5;
-	text-transform: none;
-	z-index:2000;
-}
-#coord-x:before{
-
-	content:"X: "
-}
-#coord-x:after{
-
-	content:"  "
-}
-#coord-y:before{
-	content:"Y: "
-}
-.close_chat{
-	opacity:0;
-}
-.mobile .close_chat {
-position: absolute;
-    z-index: 2002;
-    right: 0px;
-    top: 0px;
-    display: table;
-	    font-size: 200%;
-		opacity:1;
 }

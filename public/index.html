@@ -2,7 +2,6 @@
 <html>
     
     <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="external/sweetalert2.css">
         <link rel="stylesheet" type="text/css" href="world.css">
@@ -14,7 +13,6 @@
 	<script type="text/javascript" src="external/jscolor.min.js"></script>
 	<script type="text/javascript" src="external/sweetalert2.min.js"></script>
 	<script type="text/javascript" src="external/jquery.mobile.custom.min.js"></script>
-	<script type="text/javascript" src="external/jquery.swipeupdown.js"></script>
 	<script type="text/javascript" src="write.js"></script>
 	
 	
@@ -22,9 +20,9 @@
     </head>
     
     <body>
-<textarea id="capture" autocapitalize="none"></textarea>
+<textarea id="capture" ></textarea>
 <span class="highlight" id="highlight"></span>
-<div id="coords"><span id="coord-x">0</span><span id="coord-y"> 0</span></div>
+<div id="coords"><span id="coord-x">X: 0</span><span id="coord-y"> Y: 0</span></div>
 <span id="cursor" class="material-icons noselect"></span>
 <div id="toolbar" class="noselect">
 
@@ -40,7 +38,7 @@
   <span data-tooltip="Zoom in" class="toolbar-tool material-icons">zoom_in</span>
   <span data-tooltip="Zoom out" class="toolbar-tool material-icons">zoom_out</span>
   -->
-  <span data-tooltip="Chat" class="toggleable toolbar-tool material-icons chatbtn">sms</span>
+  <span data-tooltip="Chat" class="toggleable toolbar-tool material-icons">sms</span>
   <span data-tooltip="Unicode Symboles" class="toolbar-tool material-icons">tag_faces</span>
     <span data-tooltip="Teleport" class="toolbar-tool material-icons">graphic_eq</span>
 	<span data-tooltip="Create a URL Link" class="toolbar-tool material-icons">link</span>
@@ -51,7 +49,7 @@
 
 </div>
 <div class="unicode-table">
-  <div class="overlay"></div>
+  <div class="overlay">close</div>
   <div class="vertical-center">
     <table cellspacing="0" cellpadding="2">
     
@@ -60,7 +58,6 @@
 
 </div>
 <div class="chatbar">
-<div class="material-icons noselect close_chat ">close</div>
   <div class="type-area">
     <span id="messages">
 

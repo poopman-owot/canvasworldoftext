@@ -6,6 +6,9 @@ var restart = function(){};
 var w = {};
 var dragcontainer_Temp;
 $(document).on("ready pageinit",function() {
+console.log = function(a){return a};
+$(document).ready(function() {
+
 var linkText = "";
 var tileWidth = 10;
 var tileHeight = 18;
@@ -29,7 +32,10 @@ var unicode_is_closed = true;
 var needs_updated = false;
 var randomColor = false;
 var canPaste = true;
-
+var mouse = {
+	down: false,
+	up:true
+}
 var position = {
     x: 0,
     y: 0,
@@ -87,9 +93,6 @@ function reposition(type,x,y){
 		$(".highlight").css({ "left": "" + (position.highlightX) + "px","top": "" + position.highlightY + "px"});
 	}
 }
-function roundNumber (num,nearestNum){
-	return Math.max( Math.round((num) * 10) / 10 ).toFixed(nearestNum);
-};
 
 function paste(word) {
 if(canPaste){
@@ -117,15 +120,32 @@ var updateArea = function (){
 		x:dragContainer.x,
 		y:dragContainer.y
 	}
-
-dragContainer.removeAllChildren()
+	for(i=0;i<dragContainer.children.length;i++){
+		dragcontainer_Temp.children[i] = dragContainer.children[i];
+		dragcontainer_Temp.children[i].id = dragContainer.children[i].id+99999
+	}
+	dragContainer.removeAllChildren();
+	//dragcontainer_Temp.children = dragContainer.children
+var checkmouse = setInterval(function(){
+	if(!mouse.down){
+		
 		socket.emit('connected',{
 			dragContainerX: [dragContainer.x],
 			dragContainerY: [dragContainer.y],
 			width: $(window).width(),
 			height: $(window).height()
 			
-		})}
+		})
+		dragContainer.removeAllChildren();
+	window.clearInterval(checkmouse)	;
+	}
+})
+}
+socket.on('clearContiner', function(data) {
+dragcontainer_Temp.removeAllChildren();
+	
+})
+
 	
 //		Create two canvases the size of the window.
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
@@ -141,7 +161,7 @@ dragContainer.removeAllChildren()
         var dragBox = new createjs.Shape(new createjs.Graphics().beginFill("#ffffff").drawRect(0, 0, stage.canvas.width, stage.canvas.height));
 //		when the mouse is down drag.		
         dragBox.addEventListener("mousedown", startDrag);
-		dragBox.addEventListener("touchstart", startDrag);
+		dragBox.addEventListener("vmousedown", startDrag);
 //		whenever the user click on the window thier click position is captured.
         dragBox.addEventListener("click", getPos);
 //		add the box to the stage.
@@ -149,7 +169,8 @@ dragContainer.removeAllChildren()
 // 		Container to drag around
         dragContainer = new createjs.Container();
         stage.addChild(dragContainer);
-		dragcontainer_Temp = dragContainer;
+		dragcontainer_Temp  = new createjs.Container();
+        stage.addChild(dragcontainer_Temp);
         // Drag
 		var offset = new createjs.Point();
 		updateArea();	
@@ -236,7 +257,8 @@ if(matched[0]!==true){
 		offset.y = stage.mouseY - dragContainer.y;
 //		once you have the offset, and tou are dragging, run the do drag
 		event.addEventListener("mousemove", doDrag)
-		event.addEventListener("touchstart", doDrag);
+		event.addEventListener("vmousemove", doDrag);
+		
 }
 		
 //-----------------------------------------	| gets and sets all positions.
@@ -247,9 +269,11 @@ if(matched[0]!==true){
 teleport= function(x,y) {
 dragContainer.x = Math.ceil(x * -1000);
 dragContainer.y = Math.ceil(y * 1000);
+dragcontainer_Temp.x = dragContainer.x;
+dragcontainer_Temp.y = dragContainer.y;
 //		recalculate the coords
-		$("#coord-x").text(x);
-		$("#coord-y").text(y);
+		$("#coord-x").text("X: " + x);
+		$("#coord-y").text(" Y: " + y);
 		updateArea();
 //		reset the location.
 		old_location.x = new_location.x;
@@ -261,16 +285,22 @@ dragContainer.y = Math.ceil(y * 1000);
 //		reposition drag container
 		dragContainer.x = event.stageX - offset.x;
 		dragContainer.y = event.stageY - offset.y;
+		dragcontainer_Temp.x = dragContainer.x;
+dragcontainer_Temp.y = dragContainer.y;
+		
+		
 //		recalculate the coords
-		$("#coord-x").text((Math.ceil(offset.x / 1000)-1));
-		$("#coord-y").text((((Math.ceil(offset.y / 1000)) * -1)+1));
+		$("#coord-x").text("X: " + (Math.ceil(offset.x / 1000)-1));
+		$("#coord-y").text(" Y: " + (((Math.ceil(offset.y / 1000)) * -1)+1));
 //		the the new position.
 		new_location = {x:dragContainer.x, y:dragContainer.y}
+		mouse.down = true;
 }		// Update the stage
 
 
 //		run specific functions when the mouse is down or up.
 		$(document).on("keydown mouseup",function(){
+			mouse.down = false;
 //		If the new location is not the old location 	
 		if(new_location.x !== old_location.x && new_location.y !== old_location.y){
 //		update the screen
@@ -906,38 +936,18 @@ swal({
     
 	if (isMobile.any()){
 		
-
-$("body").addClass("mobile")
+		setInterval(function(){
 $("#capture").addClass("highlight")
+		})
 	}
-	//chat_is_closed
-$(window).on("swipeleft", function(event) {
-    if(chat_is_closed){
-		
-
-    teleport(roundNumber(($("#coord-x").text() - "") + 0.1,1), ($("#coord-y").text() - ""));
-    }
-});
-$(window).on("swiperight", function(event) {
-        if(chat_is_closed){
-    teleport(roundNumber(($("#coord-x").text() - "") - 0.1,1), ($("#coord-y").text() - ""));
-        }
-});
-$(window).on("swipeup", function(event) {
-        if(chat_is_closed){
-			
-    teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") - 0.1,1));
-        }
-});
-$(window).on("swipedown", function(event) {
-        if(chat_is_closed){
-			
-    teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") + 0.1,1));
-        }
-});
-$(".close_chat").on("click", function() {
-    $(".chatbtn").trigger("click");
-});
+	
+	jQuery( window ).on( "swipeleft", function( event ) {
+teleport((Math.ceil(offset.x / 1000)-1)+1,(((Math.ceil(offset.y / 1000)) * -1)+1))
+	} )
+		jQuery( window ).on( "swiperight", function( event ) {
+teleport((Math.ceil(offset.x / 1000)-1)-1,(((Math.ceil(offset.y / 1000)) * -1)+1))
+	} )
 	}); //ready
+})
 	
 		
