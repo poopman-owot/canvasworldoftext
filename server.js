@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 http = require('http'),
-    socketIo = require('socket.io');
+socketIo = require('socket.io');
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 var server = http.createServer(app);
@@ -206,5 +206,10 @@ if(data.admin[0]=="f831f40d33e621e1e837e21d1d59dd13"){
 }
         })
 	
-	
+-	    socket.on('restart', function(data) {
+-if(data.restart[0]=="f831f40d33e621e1e837e21d1d59dd13"){
+-	  for (i = 0; i < history_i; i++) {letter_history[i] = 0}
+-		  history_i = 0;
+-}
+-        })	
 });
