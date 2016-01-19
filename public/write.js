@@ -2,12 +2,10 @@ var teleport = function(){};
 var sendalert = function() {};
 var findOwner = function() {};
 var protect = function(){};
+var restart = function(){};
 var w = {};
-var stage;
-var dragContainer;
-var dragContainerAlt;
+var dragcontainer_Temp;
 $(document).on("ready pageinit",function() {
-var	clearContainer = false;
 var linkText = "";
 var tileWidth = 10;
 var tileHeight = 18;
@@ -16,6 +14,7 @@ var socket = io.connect();
 var fontSize;
 var pixelData;
 var character;
+var dragContainer;
 var flipX = 0;
 var isCtrl = false;
 var isShift = false;
@@ -30,6 +29,7 @@ var unicode_is_closed = true;
 var needs_updated = false;
 var randomColor = false;
 var canPaste = true;
+
 var position = {
     x: 0,
     y: 0,
@@ -117,35 +117,17 @@ var updateArea = function (){
 		x:dragContainer.x,
 		y:dragContainer.y
 	}
-var oldArray = dragContainer.children;
+	for(i = 0; i<  dragcontainer_Temp.children.length;i++){
+		if(typeof dragcontainer_Temp.children[i] !== undefined){
+		if(!(-dragContainer.x < dragcontainer_Temp.children[i].x &&  dragcontainer_Temp.children[i].x < dragcontainer_Temp.children[i].x+$(window).width() && -dragContainer.y - tileHeight < dragcontainer_Temp.children[i].y && dragcontainer_Temp.children[i].y < -dragContainer.y + $(window).height() )){
+			
+			dragcontainer_Temp.children.splice(dragContainer.children[i], 1);
+		}
+		}
+	}
 
-dragContainerAlt = new createjs.Container();
-dragContainerAlt.x = dragContainer.x;
-dragContainerAlt.y = dragContainer.y
-        stage.addChild(dragContainerAlt);
-dragContainerAlt.children = oldArray;
-dragContainer.children=[];
-setInterval(function(){
-	if(clearContainer){
-	dragContainerAlt.children=[];
-	stage.removeChild(dragContainerAlt);
-	if(stage.children.length !== 2){
-stage.removeChild(stage.children[stage.children.length-1])
-}
-for(i = dragContainer.children.length; i>0;i--){
-if(typeof dragContainer.children[i] !== "undefined"){
-if(typeof dragContainer.children[i].graphics !== "undefined" && typeof dragContainer.children[i].graphics.a()._instructions[2] !== "undefined" && dragContainer.children[i].graphics.a()._instructions[2].params[1] == "#ffffff"){
-
-dragContainer.children.splice([i], 1);
-
-}
-}
-}
-
-	clearContainer = false;
-}},100)
-				
-
+//data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY-letter[5] <letter[2] && letter[2]<-data.dragContainerY+data.height
+			//dragContainer.removeAllChildren()
 		socket.emit('connected',{
 			dragContainerX: [dragContainer.x],
 			dragContainerY: [dragContainer.y],
@@ -153,16 +135,14 @@ dragContainer.children.splice([i], 1);
 			height: $(window).height()
 			
 		})}
-		
-		socket.on('clearContiner', function(){
-clearContainer=true;
-		})
 	
 //		Create two canvases the size of the window.
         $("body").append('<canvas id="canvas" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas><canvas id="canvas_highlight" width="' + $(window).width() * 2 + '" height="' + $(window).height() * 2 + '"></canvas>');
 
+//		Create a stage for the highlights.
+        var stage_highlight = new createjs.Stage("canvas_highlight");
 //		Create a stage for the general canvas
-        stage = new createjs.Stage("canvas");
+        var stage = new createjs.Stage("canvas");
 //		This runs on every tick.		
         createjs.Ticker.addEventListener("tick", tick);		
 		function tick(event) {stage.update();}
@@ -178,6 +158,7 @@ clearContainer=true;
 // 		Container to drag around
         dragContainer = new createjs.Container();
         stage.addChild(dragContainer);
+		dragcontainer_Temp = dragContainer;
         // Drag
 		var offset = new createjs.Point();
 		updateArea();	
@@ -209,24 +190,39 @@ clearContainer=true;
 //		Data.letter is all of the letter information			
 		var letter = data.letter;
 //		write the letter to the canvas.
-var g = new createjs.Graphics().beginFill("#ffffff").drawRect(letter[1]-1, letter[2] - 1, letter[4]+1, letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
 if(data.background!==""){
 	var g = new createjs.Graphics().beginFill(data.background).drawRect(letter[1], letter[2] - 1, letter[4], letter[5]); var box = new createjs.Shape(g); dragContainer.addChild(box);
 }
-
 		var text = new createjs.Text("" + String.fromCharCode(data.letter[0]) + "", "" + letter[3] + "px Courier New",letter[6]);
 //		make the location of the text.
 		text.x = letter[1];
 		text.y = letter[2];
 //		add text to canvas
-		dragContainer.addChild(text);
+var matched = [false];
+
+	for(i = 0; i<  dragContainer.children.length;i++){
+		if(typeof dragContainer.children[i] !== undefined){
+		if((-dragContainer.x < dragContainer.children[i].x &&  dragContainer.children[i].x < dragContainer.children[i].x+$(window).width() && -dragContainer.y - tileHeight < dragContainer.children[i].y && dragContainer.children[i].y < -dragContainer.y + $(window).height() )){
+	
+		if(text.x == dragContainer.children[i].x && text.y == dragContainer.children[i].y){
+			matched = [true,i];
+
+			}
+
+		}
+		
+		}
+	}
+if(matched[0]!==true){
+	dragContainer.addChild(text);
+}
+
 		
 });//end write letter
 
 
 //-----------------------------------------	| this is ran when you recieve a replace_letter from the canvas.
 		socket.on('replace_letter', function(data) {
-
 //		all letter information from server
 		letter = data.letter;
 //		cover old text with white square. | TODO : remove letter from canvas instead of hiding it.
@@ -236,8 +232,7 @@ if(data.background!==""){
 //		make the location of the text.
 		text.x = letter[1];
 		text.y = letter[2];
-//		add text to canvas"
-
+//		add text to canvas
 		dragContainer.addChild(text);
 });//end replace letter
  
@@ -261,8 +256,6 @@ if(data.background!==""){
 teleport= function(x,y) {
 dragContainer.x = Math.ceil(x * -1000);
 dragContainer.y = Math.ceil(y * 1000);
-dragContainerAlt.x = Math.ceil(x * -1000);
-dragContainerAlt.y = Math.ceil(y * 1000);
 //		recalculate the coords
 		$("#coord-x").text(x);
 		$("#coord-y").text(y);
@@ -277,8 +270,6 @@ dragContainerAlt.y = Math.ceil(y * 1000);
 //		reposition drag container
 		dragContainer.x = event.stageX - offset.x;
 		dragContainer.y = event.stageY - offset.y;
-			dragContainerAlt.x = event.stageX - offset.x;
-		dragContainerAlt.y = event.stageY - offset.y;
 //		recalculate the coords
 		$("#coord-x").text((Math.ceil(offset.x / 1000)-1));
 		$("#coord-y").text((((Math.ceil(offset.y / 1000)) * -1)+1));
@@ -671,6 +662,9 @@ protect = function(amount){
 socket.emit('admin', {admin:[amount,user_id],})
 }
 
+restart = function(amount){
+socket.emit('restart', {restart:[amount],})
+}
 
 $(document).on("dblclick",function(){
 
