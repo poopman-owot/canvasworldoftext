@@ -7,7 +7,9 @@ var w = {};
 var dragcontainer_Temp;
 $(document).on("ready pageinit",function() {
 console.log = function(a){return a};
-$(document).ready(function() {
+ function roundNumber(num, nearestNum) {
+        return Math.max(Math.round((num) * 10) / 10).toFixed(nearestNum);
+    };
 
 var linkText = "";
 var tileWidth = 10;
@@ -934,20 +936,44 @@ swal({
     });//end mousemove toggled
 	document.write = function(){};
     
-	if (isMobile.any()){
-		
-		setInterval(function(){
-$("#capture").addClass("highlight")
-		})
-	}
+
+  if (isMobile.any()) {
+
+
+        $("body").addClass("mobile")
+        $("#capture").addClass("highlight")
+    }
+    //chat_is_closed
+    $(window).on("swipeleft", function(event) {
+        if (chat_is_closed) {
+
+
+            teleport(roundNumber(($("#coord-x").text() - "") + 0.1, 1), ($("#coord-y").text() - ""));
+        }
+    });
+    $(window).on("swiperight", function(event) {
+        if (chat_is_closed) {
+            teleport(roundNumber(($("#coord-x").text() - "") - 0.1, 1), ($("#coord-y").text() - ""));
+        }
+    });
+    $(window).on("swipeup", function(event) {
+        if (chat_is_closed) {
+
+            teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") - 0.1, 1));
+        }
+    });
+    $(window).on("swipedown", function(event) {
+        if (chat_is_closed) {
+
+            teleport(($("#coord-x").text() - ""), roundNumber(($("#coord-y").text() - "") + 0.1, 1));
+        }
+    });
+    $(".close_chat").on("click", function() {
+        $(".chatbtn").trigger("click");
+    });
 	
-	jQuery( window ).on( "swipeleft", function( event ) {
-teleport((Math.ceil(offset.x / 1000)-1)+1,(((Math.ceil(offset.y / 1000)) * -1)+1))
-	} )
-		jQuery( window ).on( "swiperight", function( event ) {
-teleport((Math.ceil(offset.x / 1000)-1)-1,(((Math.ceil(offset.y / 1000)) * -1)+1))
-	} )
-	}); //ready
+	
+	
 })
 	
 		
