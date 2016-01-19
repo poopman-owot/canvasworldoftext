@@ -117,17 +117,8 @@ var updateArea = function (){
 		x:dragContainer.x,
 		y:dragContainer.y
 	}
-	for(i = 0; i<  dragcontainer_Temp.children.length;i++){
-		if(typeof dragcontainer_Temp.children[i] !== undefined){
-		if(!(-dragContainer.x < dragcontainer_Temp.children[i].x &&  dragcontainer_Temp.children[i].x < dragcontainer_Temp.children[i].x+$(window).width() && -dragContainer.y - tileHeight < dragcontainer_Temp.children[i].y && dragcontainer_Temp.children[i].y < -dragContainer.y + $(window).height() )){
-			
-			dragcontainer_Temp.children.splice(dragContainer.children[i], 1);
-		}
-		}
-	}
 
-//data.dragContainerX < letter[1] && letter[1] < -data.dragContainerX+data.width && -data.dragContainerY-letter[5] <letter[2] && letter[2]<-data.dragContainerY+data.height
-			//dragContainer.removeAllChildren()
+dragContainer.removeAllChildren()
 		socket.emit('connected',{
 			dragContainerX: [dragContainer.x],
 			dragContainerY: [dragContainer.y],
